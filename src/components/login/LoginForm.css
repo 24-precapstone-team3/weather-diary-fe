@@ -1,0 +1,32 @@
+.LoginForm {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+}
+
+.LoginForm input {
+    display: inline-block;
+    width: calc(75% - 5px);
+    padding: 10px;
+    border: 1px solid #ececec;
+    font-size: 16px;
+    letter-spacing: 1px;
+    box-sizing: border-box;
+    vertical-align: middle;
+    border-radius: 10px;
+}
+
+.LoginForm .Button {
+    display: inline-block;
+    width: 25%;
+    padding: 10px;
+    letter-spacing: 1px;
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+
+.LoginForm input:focus {
+    outline: none;
+}

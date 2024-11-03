@@ -1,0 +1,15 @@
+.LoginSublogo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.LoginSublogo img {
+    width: 15%;
+}
+
+.LoginSublogo .sublogo_text {
+    font-size: 24px;
+    font-weight: bold;
+}

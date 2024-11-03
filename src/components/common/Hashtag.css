@@ -1,0 +1,13 @@
+.Hashtag {
+    outline: none;
+    cursor: pointer;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: "81e4bb80";
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}

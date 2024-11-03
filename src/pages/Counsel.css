@@ -1,0 +1,144 @@
+.feedback-button {
+    padding: 10px 20px; /* 버튼 내부 여백 */
+    background-color: #007bff; /* 버튼 배경색 */
+    color: white; /* 글자 색상 */
+    border: none; /* 테두리 없음 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    cursor: pointer; /* 포인터 커서 */
+    font-size: 16px; /* 글자 크기 */
+}
+
+.counsel-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 중앙 정렬 */
+    margin: 20px; /* 여백 설정 */
+}
+
+.counsel-all {
+    background-color: #F6F6F6; /* 배경색 설정 */
+    padding-top: 5px;
+    padding-left: 30px; /* 내부 여백 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow:
+        -2px 0 2px rgba(0, 0, 0, 0.1), /* 왼쪽 그림자 */ 
+        2px 4px 10px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
+    width: 275px;
+    height: 470px;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-bottom: 30px;
+    max-height: 500px; /* 최대 높이 설정 (고정된 높이에 맞춰 조정) */
+    left: 55px; /* 왼쪽 간격 조정 */
+
+    /* 말풍선 모양을 위한 추가 스타일 */
+    position: relative; /* 위치 속성 추가 */
+    
+}
+
+/* 말풍선 꼬리 부분 */
+.counsel-all::after {
+    content: ''; /* 내용을 비워두어야 함 */
+    position: absolute; /* 절대 위치 설정 */
+    top: 20px; /* 모달의 세로 중앙에 위치하도록 설정 */
+    right: 100%; /* 모달의 왼쪽에 위치 */
+    border-width: 15px; /* 삼각형의 크기 증가 */
+    border-style: solid; /* 경계선을 설정 */
+    border-color: transparent #F6F6F6 transparent transparent; /* 왼쪽을 향하는 말풍선 색상 */
+    
+    /* 그림자 효과 추가 */             
+}
+
+
+
+.image-doctor {
+    width: 70px; /* 이미지 너비 */
+    height: auto; /* 비율 유지 */
+    margin-right: 20px; /* 이미지와 말풍선 간격 */
+    position: absolute; /* 절대 위치 설정 */
+    left: -82px; /* 모달의 왼쪽에 위치하도록 조정 */
+    top: 7%; /* 세로 중앙으로 맞추기 */
+    transform: translateY(-50%); /* 정확히 중앙에 맞추기 위해 변환 */
+
+}
+
+.feedback-message {
+    padding-left: -10px; /* 상하좌우 px 여백 */
+    padding-right: 15px;
+    font-size: 18px; /* 글자 크기 */
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between; /* 버튼 사이의 공간을 균등하게 배치 */
+}
+
+.save-button, .close-button {
+    margin-top: 10px;
+    padding: 12px 20px; /* 버튼의 내부 여백 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    border-radius: 30px; /* 모서리 둥글게 */
+    cursor: pointer; /* 포인터 커서 */
+    font-size: 20px; /* 글자 크기 */
+    width: 150px; /* 너비 조정 */
+    height: 50px; /* 높이 조정 */
+    text-align: center; /* 텍스트 수평 중앙 정렬 */
+    line-height: 30px; /* 높이에 맞춰 텍스트 수직 중앙 정렬 */
+}
+
+.save-button {
+    background-color: #C3EBFF; /* 분석 버튼 색상 */
+    color: #22ABF3;
+    border: none;
+    margin-left: 30px; /* 분석 버튼과 닫기 버튼 사이의 여백을 줄입니다 */
+}
+
+.close-button {
+    line-height: 25px;
+    background-color: #ffffff; /* 닫기 버튼 색상 */
+    border: 3px solid #22ABF3; /* 테두리 두께와 색상 설정 */
+    color: #22ABF3; /* 텍스트 색상 수정 */
+    margin-right: 30px; /* 분석 버튼과 닫기 버튼 사이의 여백을 줄입니다 */
+}
+
+.save-button:hover {
+    background-color: #22ABF3; /* 저장 버튼 마우스 오버 시 색상 */
+    color:white;
+}
+
+.close-button:hover {
+    background-color: #22ABF3; /* 닫기 버튼 마우스 오버 시 색상 */
+    color:white;
+}
+
+.modal-overlay {
+    position: fixed; /* 화면에 고정된 위치 */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.2); /* 반투명 배경 */
+    display: flex; /* Flexbox로 중앙 정렬 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    z-index: 1000; /* 다른 요소 위에 표시 */
+}
+
+.modal-content {
+    background-color: white; /* 모달 배경색 */
+    padding: 20px; /* 내부 여백 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    width: 400px; /* 모달 너비 */
+    max-height: 80%; /* 최대 높이 */
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+}
+
+.modal-content {
+    cursor: grab; /* 드래그할 때 커서 모양 변경 */
+}
+
+.modal-content:active {
+    cursor: grabbing; /* 드래그 중 커서 모양 변경 */
+}
