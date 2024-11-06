@@ -13,15 +13,6 @@
     background-color: #0056b3; /* 마우스 오버 시 색상 변경 */
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f4f8;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
 
 .container {
     width: 400px; /* 컨테이너 너비 설정 */
@@ -29,31 +20,33 @@ body {
 
 .modal-body {
     margin-top: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 .header {
-    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .date {
     font-size: 18px; /* 헤더 글씨 크기 조절 */
-    margin-left: 10px; /* 날짜와 왼쪽 사이의 간격 조정 */
 }
 
-.weather-emotion {
+.emotion_wrapper {
     display: flex;
-    margin-left: 10px;
-    justify-content: center;
-    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .weather, .emotion {
     font-size: 18px; /* 헤더 글씨 크기 조절 */
-    margin-left: 10px; /* 날짜와 왼쪽 사이의 간격 조정 */
-    margin-top: 5px; /* 필요에 따라 위쪽 마진 추가 */
 }
 
 .diary-all {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     background-color: #F6F6F6; /* 배경색 설정 */
     padding: 30px; /* 내부 여백 */
     border-radius: 8px; /* 모서리 둥글게 */
@@ -62,35 +55,34 @@ body {
         2px 4px 10px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
     width: 300px;
     margin: 20px;
-    max-height: 500px; /* 최대 높이 설정 (고정된 높이에 맞춰 조정) */
 }
 
 .image-book {
-    position: relative;
+    position: absolute;
     width: 140px; /* 책 이미지 크기 조정 */
     height: auto;
-    left: -90px;
-    top: -60px;
+    left: -20px;
+    top: 0px;
 }
 
-.image-upload {
+.image-sample {
     position: relative;
     width: 100%;
     height: auto;
 }
 
 .analysis-content {
-    margin: 15px 0;
     font-size: 16px;
+    word-break: break-all;
+    line-height: 1.5;
     color: #333;
 }
 
 .hashtags {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 10px;
-    margin-bottom: 15px;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
 }
 
 .hashtag1, .hashtag2, .hashtag3 {
@@ -114,6 +106,7 @@ body {
 .hashtag3 {
     background-color: #52ACFF;
 }
+
 .feedback-all {
     display: flex;
     background-color: #F6F6F6; /* 배경색 설정 */
@@ -147,7 +140,7 @@ body {
     margin-right: 20px; /* 이미지와 말풍선 간격 */
     position: relative;
     left: -95px;
-    top: -20px;
+    top: -10px;
 }
 
 .feedback-message {
@@ -159,51 +152,13 @@ body {
     flex: 1;
 }
 
-.button-container {
+.diary-button-container {
+    padding: 20px;
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
+    gap: 20px;
 }
 
-.counsel-button, .edit-button, .close-button {
-    align-items: center; /* 수직 중앙 정렬 */
-    border-radius: 30px; /* 모서리 둥글게 */
-    cursor: pointer; /* 포인터 커서 */
-    font-size: 20px; /* 글자 크기 */
-    width: 100px; /* 너비 조정 */
-    height: 50px; /* 높이 조정 */
-    text-align: center; /* 텍스트 수평 중앙 정렬 */
-    line-height: 30px; /* 높이에 맞춰 텍스트 수직 중앙 정렬 */
-    margin: 5px; /* 버튼 사이의 간격 설정 (상하좌우 10px) */
-}
-
-.counsel-button {
-    background-color: #C3EBFF; /* 분석 버튼 색상 */
-    color: #22ABF3;
-    border: none;
-}
-
-.edit-button {
-    background-color: #C3EBFF; /* 분석 버튼 색상 */
-    color: #22ABF3;
-    border: none;
-}
-
-.close-button {
-    background-color: #ffffff; /* 닫기 버튼 색상 */
-    border: 3px solid #22ABF3; /* 테두리 두께와 색상 설정 */
-    color: #22ABF3; /* 텍스트 색상 수정 */ 
-}
-
-.counsel-button:hover, .edit-button:hover {
-    background-color: #22ABF3; /* 저장 버튼 마우스 오버 시 색상 */
-    color:white;
-}
-
-.close-button:hover {
-    background-color: #22ABF3; /* 저장 버튼 마우스 오버 시 색상 */
-    color:white;
-}
 .modal-overlay {
     position: fixed;
     top: 0;

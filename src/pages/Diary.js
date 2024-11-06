@@ -1,15 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Diary.css'; // CSS 파일 추가
 import imgBook from "../images/img_book.png";
-import imgFile from "../images/img_file.png";
+import imgSample from "../images/img_sample.png";
 import imgDoctor from "../images/img_doctor.png";
+import Button from '../components/common/Button';
 
 const Modal = ({ isOpen, onClose, children }) => {
+    const modalRef = useRef(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [offset, setOffset] = useState({ x: 0, y: 0 });
+    const [modalPosition, setModalPosition] = useState({ top: 100, left: 100 });
+
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+            if (isDragging) {
+                setModalPosition({
+                    top: e.clientY - offset.y,
+                    left: e.clientX - offset.x,
+                });
+            }
+        };
+
+        const handleMouseUp = () => {
+            setIsDragging(false);
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [isDragging, offset]);
+
+    const handleMouseDown = (e) => {
+        setIsDragging(true);
+        setOffset({
+            x: e.clientX - modalRef.current.getBoundingClientRect().left,
+            y: e.clientY - modalRef.current.getBoundingClientRect().top,
+        });
+    };
+
     if (!isOpen) return null;
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}
+                ref={modalRef} 
+                style={{ top: modalPosition.top, left: modalPosition.left, position: 'absolute' }} // 위치 설정
+                onMouseDown={handleMouseDown} // 드래그 기능 추가
+            >
                 <div className="modal-body">
                     {children}
                 </div>
@@ -29,28 +70,24 @@ const Diary = () => {
         setIsModalOpen(false);
     };
 
+    useEffect(() => {
+        handleOpenModal();
+    }, []);
+
     return (
         <div className="container">
-            <button className="view-button" onClick={handleOpenModal}>일기 보기</button>
                 <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
                     <div className="diary-all">
+                    <img src={imgBook} alt="book" className="image-book" />
                         <div className="header">
-                            <img src={imgBook} alt="book" className="image-book" />
                             <div className="date">2024.10.22.화</div>
-                            <div className='weather-emotion'></div>
-                            <div className="weather">날씨: 맑음</div>
-                            <div className="emotion">기분: 행복</div>
+                            <div className='weather-emotion'>
+                                <div className="weather">날씨: 맑음</div>
+                                <div className="emotion">기분: 행복</div>
+                            </div>
                         </div>
-                        <img src={imgFile} alt="upload" className="image-upload" />
+                        <img src={imgSample} alt="upload" className="image-sample" />
                         <div className="analysis-content">분석된 일기 내용...
-                        lskdjflksjdlkfjsldkjfksdjflksdjlfkjsdlkfjlskdjflksjdlfkjs
-                                lskdjflksjdlkfjsldkjfksdjflksdjlfkjsdlkfjlskdjflksjdlfkjs
-                                lskdjflksjdlkfjsldkjfksdjflksdjlfkjsdlkfjlskdjflksjdlfkjs
-                                lskdjflksjdlkfjsldkjfksdjflksdjlfkjsdlkfjlskdjflksjdlfkjs
-                                lskdjflksjdlkfjsldkjfksdjflksdjlfkjsdlkfjlskdjflksjdlfkjs
-                                lskdjflksjdlkfjsldkjfksdjflksdjlfkjsdlkfjlskdjflksjdlfkjs
-                                lskdjflksjdlkfjsldkjfksdjflksdjlfkjsdlkfjlskdjflksjdlfkjs
-                                lskdjflksjdlkfjsldkjfksdjflksdjlfkjsdlkfjlskdjflksjdlfkjs
                         </div>
                         <div className="hashtags">
                             <span className="hashtag1" style={{ backgroundColor: '#FCC3CC' }}># 달리기</span>
@@ -62,10 +99,10 @@ const Diary = () => {
                             <img src={imgDoctor} alt="doctor" className="image-doctor" />
                             <div className="feedback-message">심리 상담 피드백!</div>
                         </div>
-                        <div className="button-container">
-                            <button className="counsel-button">심리 상담</button>
-                            <button className="edit-button">수 정</button>
-                            <button className="close-button" onClick={handleCloseModal}>닫 기</button>
+                        <div className="diary-button-container">
+                            <Button text={"심리 상담"} />
+                            <Button text={"수 정"} />
+                            <Button text={"닫 기"} type={"light"} onClick={handleCloseModal} />
                         </div>
                 </Modal>
             

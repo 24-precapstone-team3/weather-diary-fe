@@ -1,10 +1,34 @@
-import { faHashtag, faPhone, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faGear, faHashtag, faMagnifyingGlass, faPhone, faPowerOff, faUser, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { auth } from "./firebase";
 
 export const icons = {
     faPhone,
     faHashtag,
-    faXmark
+    faXmark,
+    faMagnifyingGlass,
+    faAngleDown
 };
+
+export const menuItems = [
+    {
+        icon: faUser,
+        content: "Profile",
+        onClick: () => console.log("사용자 프로필")
+    },
+    {
+        icon: faGear,
+        content: "Setting",
+        onClick: () => console.log("설정")
+    },
+    {
+        icon: faPowerOff,
+        content: "Logout",
+        onClick: () => {
+            auth.signOut();
+            window.location.reload();
+        }
+    }
+];
 
 export const toLocalePhoneNumber = (input) => {
     const cleanText = input.replace(/-/g, "");

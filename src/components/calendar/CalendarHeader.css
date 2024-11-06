@@ -1,0 +1,67 @@
+.CalendarHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+}
+
+.CalendarHeader .left_section {
+    display: flex;
+    align-items: center;
+    width: 60%;
+}
+
+.CalendarHeader .left_section img {
+    width: 10%;
+}
+
+.CalendarHeader .left_section .sublogo_text {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.CalendarHeader .left_section .search_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #f6f6f6;
+    margin: 0 20px;
+    border: 1px solid #ececec;
+    border-radius: 24px;
+    padding: 8px 16px;
+    font-size: 16px;
+}
+
+.CalendarHeader .left_section .search_wrapper input {
+    border: none;
+    background-color: #f6f6f6;
+    vertical-align: middle;
+    border-radius: 20px;
+}
+
+.CalendarHeader .left_section .search_wrapper input:focus {
+    outline: none;
+}
+
+.CalendarHeader .right_section {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 20px;
+    flex: 1;
+}
+
+.CalendarHeader .right_section .weather_wrapper {
+    font-size: 16px;
+}
+
+@media (max-width: 1280px) {
+    .CalendarHeader .left_section .sublogo_text,
+    .CalendarHeader .right_section .weather_wrapper {
+        font-size: 1.2vw;
+    }
+
+    .CalendarHeader .left_section .search_wrapper {
+        padding: 0.6vw 1.2vw;
+        font-size: 1.2vw;
+    }
+}

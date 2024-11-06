@@ -1,0 +1,39 @@
+.CalendarTile {
+    cursor: pointer;
+    display: flex;
+    height: 100px;
+    font-size: 16px;
+    border: 1px solid #ececec;
+    border-radius: 5px;
+    text-align: initial;
+    padding: 10px;
+}
+
+.CalendarTile_weekend {
+    background-color: #f6f6f6;
+}
+
+.CalendarTile_today {
+    background-color: #fcec8c;
+}
+
+.CalendarTile:hover {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
+}
+
+.CalendarTile .date_wrapper {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+@media (max-width: 1280px) {
+    .CalendarTile {
+        font-size: 1.2vw;
+        height: 7.8vw;
+        padding: 0.8vw;
+    }
+
+    .CalendarTile .date_wrapper {
+        font-size: 1.5vw;
+    }
+}

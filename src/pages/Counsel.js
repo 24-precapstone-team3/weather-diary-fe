@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Counsel.css'; // 스타일 파일 import
 import imgDoctor from "../images/img_doctor.png";
+import Button from '../components/common/Button';
+import Swal from 'sweetalert2';
 
 // 모달 컴포넌트 정의
 const Modal = ({ isOpen, children }) => {
@@ -60,13 +62,11 @@ const Modal = ({ isOpen, children }) => {
 const Counsel = () => {
     const [isOpen, setIsOpen] = useState(false); // 팝업 열림 상태
     const [displayText, setDisplayText] = useState(''); // 표시할 텍스트
-    const fullText = '심리 상담 피드백!'; // 전체 텍스트
+    const fullText = ' 심리 상담 피드백!'; // 전체 텍스트
 
-    // 모달 열기 핸들러
-    const handleOpenPopup = () => {
-        setIsOpen(true);
-        setDisplayText(''); // 모달 열 때 텍스트 초기화
-    };
+    useEffect(() => {
+        setIsOpen(true); // 수정된 부분: 컴포넌트가 마운트될 때 모달을 자동으로 열기
+    }, []);
 
     // 모달 닫기 핸들러
     const handleClosePopup = () => {
@@ -94,13 +94,19 @@ const Counsel = () => {
     // 저장 핸들러
     const handleSave = () => {
         localStorage.setItem('feedbackText', displayText); // displayText를 로컬 스토리지에 저장
-        alert('저장되었습니다!'); // 저장 완료 알림
+        Swal.fire({
+            title: "심리 상담 저장",
+            text: "저장되었습니다!",
+            icon: "success",
+            confirmButtonText: "확인",
+            customClass: {
+                confirmButton: 'no-focus-outline'
+            },
+        });
     };
 
     return (
         <div className="counsel-container">
-            <button onClick={handleOpenPopup} className="feedback-button">피드백 보기</button>
-
             {/* 모달 창 */}
             <Modal isOpen={isOpen} onClose={handleClosePopup}>
                 <div className="counsel-all">
@@ -111,9 +117,9 @@ const Counsel = () => {
                         <p>{displayText}</p> {/* 표시할 텍스트 */}
                     </div>
                 </div>
-                <div className="button-container">
-                    <button onClick={handleSave} className="save-button">저 장</button>
-                    <button onClick={handleClosePopup} className="close-button">닫 기</button>
+                <div className="counsel-button-container">
+                    <Button text={"저 장"} onClick={handleSave} />
+                    <Button text={"닫 기"} type={"light"} onClick={handleClosePopup} />
                 </div>
             </Modal>
         </div>

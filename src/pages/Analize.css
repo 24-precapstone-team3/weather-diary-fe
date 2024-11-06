@@ -46,7 +46,6 @@
     border-color: transparent #F6F6F6 transparent transparent; /* 왼쪽을 향하는 말풍선 색상 */         
 }
 
-
 .analyze-message {
     padding-left: -15px; /* 상하좌우 px 여백 */
     padding-right: 15px;
@@ -86,63 +85,12 @@
 }
 
 /* 버튼 컨테이너 스타일 */
-.button-container {
+.analize-button-container {
+    padding: 20px;
     display: flex;
-    justify-content: center; /* 버튼을 수평 중앙 정렬 */
-    gap: 10px; /* 버튼 사이의 간격 설정 */
-    margin-top: 10px; /* 버튼과 모달 내용 사이의 간격 */
+    justify-content: space-between;
+    gap: 20px;
 }
-
-/* 개별 버튼 스타일 */
-.consult-button, .save-button, .close-button {
-    align-items: center; /* 수직 중앙 정렬 */
-    border-radius: 30px; /* 모서리 둥글게 */
-    cursor: pointer; /* 포인터 커서 */
-    font-size: 20px; /* 글자 크기 */
-    width: 100px; /* 너비 조정 */
-    height: 50px; /* 높이 조정 */
-    text-align: center; /* 텍스트 수평 중앙 정렬 */
-    line-height: 30px; /* 높이에 맞춰 텍스트 수직 중앙 정렬 */
-    margin: 5px; /* 버튼 사이의 간격 설정 (상하좌우 10px) */
-}
-
-.consult-button {
-    background-color: #C3EBFF; /* 분석 버튼 색상 */
-    color: #22ABF3;
-    border: none;
-    
-}
-
-.save-button {
-    background-color: #C3EBFF; /* 분석 버튼 색상 */
-    color: #22ABF3;
-    border: none;
-    
-}
-
-.close-button {
-    line-height: 30px;
-    background-color: #ffffff; /* 닫기 버튼 색상 */
-    border: 3px solid #22ABF3; /* 테두리 두께와 색상 설정 */
-    color: #22ABF3; /* 텍스트 색상 수정 */
-    
-}
-
-.consult-button:hover {
-    background-color: #22ABF3; /* 저장 버튼 마우스 오버 시 색상 */
-    color:white;
-}
-
-.save-button:hover {
-    background-color: #22ABF3; /* 저장 버튼 마우스 오버 시 색상 */
-    color:white;
-}
-
-.close-button:hover {
-    background-color: #22ABF3; /* 저장 버튼 마우스 오버 시 색상 */
-    color:white;
-}
-
 
 /* 모달 오버레이 스타일 */
 .modal-overlay {

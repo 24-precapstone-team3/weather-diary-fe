@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom'; //useHistory 훅 추가
 import './New.css';
 import imgPencil from "../images/img_pencil.png";
 import imgFile from "../images/img_file.png";
+import Button from '../components/common/Button';
 
 const Modal = ({ isOpen, children, onClose }) => {
     const modalRef = useRef(null);
@@ -56,6 +57,10 @@ const New = () => {
     const [isOpen, setIsOpen] = useState(false); // 팝업 열림 상태
     const navigate = useNavigate(); //useHistory 훅 사용
 
+    useEffect(() => {
+        setIsOpen(true); // 컴포넌트가 마운트될 때 모달을 열도록 설정
+    }, []); // 빈 배열을 넣어 컴포넌트가 처음 마운트될 때만 실행되도록 함
+
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         setFile(selectedFile);
@@ -83,11 +88,7 @@ const New = () => {
     const handleAnalyze = () => {
         handleSave(); // 저장 후 분석 기능 수행
         console.log('일기 분석 시작'); // 분석 로직 추가
-        navigate('/Analize'); // 일기 분석 페이지로 이동
-    };
-
-    const handleOpenPopup = () => {
-        setIsOpen(true);
+        navigate('/Analize', {state: {entry, file}}); // 일기 분석 페이지로 이동
     };
 
     const handleClosePopup = () => {
@@ -97,8 +98,6 @@ const New = () => {
 
     return (
         <div className="new-container">
-            <button onClick={handleOpenPopup} className="date-button">날짜 선택</button>
-
             {/* 모달 창 */}
             <Modal isOpen={isOpen} onClose={handleClosePopup} >
                 <div className="new-all">
@@ -129,9 +128,9 @@ const New = () => {
                     </label>
                 </div>
     
-                <div className="button-container"> 
-                    <button onClick={handleAnalyze} className="analysis-button">일기분석</button> 
-                    <button onClick={handleClosePopup} className="close-button">닫  기</button>
+                <div className="new-button-container"> 
+                    <Button text={"일기분석"} onClick={handleAnalyze} /> 
+                    <Button text={"닫  기"} type={"light"} onClick={handleClosePopup} />
                 </div>
             </Modal>
         </div>

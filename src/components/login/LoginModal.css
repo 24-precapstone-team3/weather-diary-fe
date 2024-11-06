@@ -11,19 +11,19 @@
     z-index: 1000;
 }
 
-.LoginModal .content_section {
+.LoginModal .login_section {
     background-color: white;
     padding: 30px;
     border-radius: 5px;
     position: relative;
 }
 
-.LoginModal .content_section .icon_wrapper {
+.LoginModal .login_section .icon_wrapper {
     display: flex;
     justify-content: end;
 }
 
-.LoginModal .content_section .close {
+.LoginModal .login_section .close {
     position: absolute;
     top: 10px;
     right: 10px;
