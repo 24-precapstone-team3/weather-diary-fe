@@ -4,6 +4,7 @@ import './New.css';
 import imgPencil from "../images/img_pencil.png";
 import imgFile from "../images/img_file.png";
 import Button from '../components/common/Button';
+import PageTransition from '../components/common/PageTransition';
 
 const Modal = ({ isOpen, children, onClose }) => {
     const modalRef = useRef(null);
@@ -100,38 +101,40 @@ const New = () => {
         <div className="new-container">
             {/* 모달 창 */}
             <Modal isOpen={isOpen} onClose={handleClosePopup} >
-                <div className="new-all">
-                    <div className="new-header">
-                        <img src={imgPencil} alt="Pencil" className="image-pencil" />
-                        <span>2024.10.22. 화</span>
-                    </div>
-                    <textarea 
-                        value={entry} 
-                        onChange={handleEntryChange} 
-                        className="new-textarea" 
-                        placeholder="일기를 작성하세요..."
-                    />
-                    <label htmlFor="file-upload" className="upload-label">
-                        <img src={imgFile} alt="Upload" className="image-file" /> 
-                        Click to upload {/* 클릭 시 파일 선택 */}
-                        <input 
-                            type="file" 
-                            onChange={handleFileChange}
-                            className="file-input" 
-                            id="file-upload"
-                            style={{ display: 'none' }} // 숨김 처리
+                <PageTransition>
+                    <div className="new-all">
+                        <div className="new-header">
+                            <img src={imgPencil} alt="Pencil" className="image-pencil" />
+                            <span>2024.10.22. 화</span>
+                        </div>
+                        <textarea 
+                            value={entry} 
+                            onChange={handleEntryChange} 
+                            className="new-textarea" 
+                            placeholder="일기를 작성하세요..."
                         />
-                        {/* 이미지 미리보기 */}
-                        {filePreview && (
-                            <img src={filePreview} alt="File Preview" className="file-preview" />
-                        )}
-                    </label>
-                </div>
-    
-                <div className="new-button-container"> 
-                    <Button text={"일기분석"} onClick={handleAnalyze} /> 
-                    <Button text={"닫  기"} type={"light"} onClick={handleClosePopup} />
-                </div>
+                        <label htmlFor="file-upload" className="upload-label">
+                            <img src={imgFile} alt="Upload" className="image-file" /> 
+                            Click to upload {/* 클릭 시 파일 선택 */}
+                            <input 
+                                type="file" 
+                                onChange={handleFileChange}
+                                className="file-input" 
+                                id="file-upload"
+                                style={{ display: 'none' }} // 숨김 처리
+                            />
+                            {/* 이미지 미리보기 */}
+                            {filePreview && (
+                                <img src={filePreview} alt="File Preview" className="file-preview" />
+                            )}
+                        </label>
+                    </div>
+        
+                    <div className="new-button-container"> 
+                        <Button text={"일기분석"} onClick={handleAnalyze} /> 
+                        <Button text={"닫  기"} type={"light"} onClick={handleClosePopup} />
+                    </div>
+                </PageTransition>
             </Modal>
         </div>
     );

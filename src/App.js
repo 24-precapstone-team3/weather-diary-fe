@@ -9,6 +9,7 @@ import Counsel from './pages/Counsel';
 import useAuthUser from './hooks/useAuthUser';
 import Loading from './components/common/Loading';
 import Swal from 'sweetalert2';
+import { DiaryDispatchContext, DiaryProvider, DiaryStateContext } from './contexts/DiaryContext';
 
 function App() {
   const { currentUser, isDataLoaded } = useAuthUser();
@@ -45,15 +46,17 @@ function App() {
     return <Loading />;
   } else {
     return (
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Calendar />} />
-          <Route path="/diary" element={<ProtectedRoute element={<Diary />} />} />
-          <Route path="/new" element={<ProtectedRoute element={<New />} />} />
-          <Route path="/analize" element={<ProtectedRoute element={<Analize />} />} />
-          <Route path="/counsel" element={<ProtectedRoute element={<Counsel />} />} />
-        </Routes>
-      </div>
+      <DiaryProvider>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<Calendar />} />
+            <Route path="/diary" element={<ProtectedRoute element={<Diary />} />} />
+            <Route path="/new" element={<ProtectedRoute element={<New />} />} />
+            <Route path="/analize" element={<ProtectedRoute element={<Analize />} />} />
+            <Route path="/counsel" element={<ProtectedRoute element={<Counsel />} />} />
+          </Routes>
+        </div>
+      </DiaryProvider>
     );
   }
 }

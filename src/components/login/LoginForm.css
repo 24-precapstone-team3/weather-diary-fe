@@ -7,10 +7,11 @@
 }
 
 .LoginForm input {
+    font-family: 'S-CoreDream-3Light';
     display: inline-block;
     width: calc(75% - 5px);
     padding: 10px;
-    border: 1px solid #ececec;
+    border: 1px solid lightgray;
     font-size: 16px;
     letter-spacing: 1px;
     box-sizing: border-box;

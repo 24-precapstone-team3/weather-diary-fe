@@ -5,6 +5,7 @@
 
 .swal2-icon {
     margin: 20px auto 0;
+    font-size: 16px;
 }
 
 .swal2-icon-content {
@@ -33,6 +34,8 @@
     background-color: #f6f6f6;
     color: black;
     border-radius: 5px;
+    font-family: 'S-CoreDream-3Light';
+    font-weight: bold;
     font-size: 16px;
     letter-spacing: 2px;
     padding: 8px 12px;
@@ -43,7 +46,48 @@
     color: black;
     border: 1px solid #ececec;
     border-radius: 5px;
+    font-family: 'S-CoreDream-3Light';
+    font-weight: bold;
     font-size: 16px;
     letter-spacing: 2px;
     padding: 8px 12px;
 }
+
+/*
+@media(max-width: 1280px) {
+    .swal2-popup {
+        max-width: 31vw;
+    }
+
+    .swal2-icon {
+        margin: 1.6vw auto 0;
+        font-size: 1.2vw;
+    }
+    
+    .swal2-icon-content {
+        font-size: 3.9vw !important;
+    }
+    
+    #swal2-title {
+        font-size: 1.8vw;
+    }
+    
+    #swal2-html-container {
+        font-size: 1.2vw;
+    }
+    
+    .swal2-actions {
+        margin: 0.8vw auto 0;
+    }
+    
+    .swal2-confirm {
+        font-size: 1.2vw;
+        padding: 0.6vw 0.9vw;
+    }
+    
+    .swal2-cancel {
+        font-size: 1.2vw;
+        padding: 0.6vw 0.9vw;
+    }
+}
+*/
