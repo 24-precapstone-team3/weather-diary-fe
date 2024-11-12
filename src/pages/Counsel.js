@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 const Modal = ({ isOpen, children }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
-    const [position, setPosition] = useState({ top: 100, left: 100 }); // 기본 위치 설정
+    const [position, setPosition] = useState({ top: 100, left: 550 }); // 기본 위치 설정
 
     const handleMouseDown = (e) => {
         setIsDragging(true);
@@ -62,7 +62,7 @@ const Modal = ({ isOpen, children }) => {
 const Counsel = () => {
     const [isOpen, setIsOpen] = useState(false); // 팝업 열림 상태
     const [displayText, setDisplayText] = useState(''); // 표시할 텍스트
-    const fullText = ' 심리 상담 피드백!'; // 전체 텍스트
+    const fullText = '심리 상담 피드백!'; // 전체 텍스트
 
     useEffect(() => {
         setIsOpen(true); // 수정된 부분: 컴포넌트가 마운트될 때 모달을 자동으로 열기
@@ -73,23 +73,26 @@ const Counsel = () => {
         setIsOpen(false);
     };
 
-    // 글자 하나씩 표시하는 효과
     useEffect(() => {
         if (isOpen) {
             let index = 0;
-            const interval = setInterval(() => {
-                // 인덱스가 범위를 초과하지 않으면 글자를 추가
-                if (index < fullText.length) {
-                    setDisplayText((prev) => prev + fullText.charAt(index)); // charAt() 사용
-                    index++; // 인덱스 증가
-                } else {
-                    clearInterval(interval); // 모든 글자를 표시한 후 정지
-                }
-            }, 50); // 글자가 나타나는 간격 (50ms로 설정)
 
-            return () => clearInterval(interval); // 컴포넌트 언마운트 시 정리
+            const displayNextCharacter = () => {
+                if (index < fullText.length) {
+                    setDisplayText((prev) => prev + fullText.charAt(index));
+                    index++;
+                    setTimeout(displayNextCharacter, 50);
+                }
+            };
+
+            displayNextCharacter();
+
+            return () => {
+                setDisplayText('');
+            };
         }
     }, [isOpen]);
+    
 
     // 저장 핸들러
     const handleSave = () => {

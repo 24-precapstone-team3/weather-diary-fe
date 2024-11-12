@@ -23,9 +23,9 @@
         -2px 0 2px rgba(0, 0, 0, 0.1), /* 왼쪽 그림자 */ 
         2px 4px 10px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
     width: 300px;
-    height: 470px;
+    height: 520px;
     margin: 20px;
-    max-height: 500px; /* 최대 높이 설정 (고정된 높이에 맞춰 조정) */
+    max-height: 520px;
 }
 
 .new-header span {
@@ -50,8 +50,8 @@
 
 .new-textarea {
     width: 95%;
-    height: 330px;
-    margin-bottom: 10px;
+    height: 380px;
+    margin-bottom: 15px;
     padding: 10px ;
     background-color: #F6F6F6; /* 배경색 설정 */
     border: none; /* 경계선 없애기 */
@@ -119,7 +119,6 @@
     padding: 20px;
     border-radius: 8px;
     width: 400px; /* 모달 너비 조절 */
-    height: 650px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative;
     overflow-y: auto;

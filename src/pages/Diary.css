@@ -15,13 +15,18 @@
 
 
 .container {
-    width: 400px; /* 컨테이너 너비 설정 */
+    width: auto; /* 컨테이너 너비 설정 */
 }
 
 .modal-body {
     margin-top: 10px;
     display: flex;
     flex-direction: column;
+}
+
+.modal-content-wrapper {
+    display: flex;
+    width: 100%;
 }
 
 .header {
@@ -34,9 +39,9 @@
     font-size: 18px; /* 헤더 글씨 크기 조절 */
 }
 
-.emotion_wrapper {
+.weather-emotion {
     display: flex;
-    gap: 10px;
+    gap: 50px;
 }
 
 .weather, .emotion {
@@ -54,6 +59,8 @@
         -2px 0 2px rgba(0, 0, 0, 0.1), /* 왼쪽 그림자 */ 
         2px 4px 10px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
     width: 300px;
+    min-height: 510px;
+    height: auto;
     margin: 20px;
 }
 
@@ -116,9 +123,9 @@
         -2px 0 2px rgba(0, 0, 0, 0.1), /* 왼쪽 그림자 */ 
         2px 4px 10px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
     width: 275px;
-    margin: 20px;
-    max-height: 500px; /* 최대 높이 설정 (고정된 높이에 맞춰 조정) */
-    left: 45px;
+    max-width: 100%;
+    margin: 20px 0;
+    left: 75px;
     position: relative;
 }
 
@@ -139,8 +146,8 @@
     height: 70px; /* 비율 유지 */
     margin-right: 20px; /* 이미지와 말풍선 간격 */
     position: relative;
-    left: -95px;
-    top: -10px;
+    left: -65px;
+    top: -20px;
 }
 
 .feedback-message {
@@ -153,6 +160,7 @@
 }
 
 .diary-button-container {
+    margin-top: auto;
     padding: 20px;
     display: flex;
     justify-content: space-between;
@@ -176,7 +184,9 @@
     background-color: white;
     border-radius: 8px;
     padding: 20px;
-    width: 400px; /* 모달 너비 설정 */
+    width: auto;
+    max-width: 800px;
+    max-height: 1000px;
     height: 80%;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     position: relative;

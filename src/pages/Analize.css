@@ -23,7 +23,7 @@
         -2px 0 2px rgba(0, 0, 0, 0.1), /* 왼쪽 그림자 */ 
         2px 4px 10px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
     width: 280px;
-    height: 600px;
+    min-height: 590px;
     margin-top: -55px;
     margin-left: 35px;
     margin-bottom: 30px;
