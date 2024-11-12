@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import React from "react";
 import "./LoginContent.css";
 import LoginForm from "./LoginForm";
 import { auth, setupRecaptchaVerifier } from "../../firebase";
@@ -147,4 +148,4 @@ const LoginContent = ({ onClose }) => {
     );
 };
 
-export default LoginContent;
+export default React.memo(LoginContent);

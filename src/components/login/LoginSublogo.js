@@ -1,3 +1,4 @@
+import React from "react";
 import "./LoginSublogo.css";
 import diarySublogo from "../../images/img_diary_sublogo.png";
 
@@ -10,4 +11,4 @@ const LoginSublogo = () => {
     );
 };
 
-export default LoginSublogo;
+export default React.memo(LoginSublogo);

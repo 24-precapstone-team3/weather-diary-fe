@@ -1,4 +1,5 @@
 .Button {
+    font-family: 'S-CoreDream-3Light';
     outline: none;
     cursor: pointer;
     padding: 10px 20px;
@@ -23,3 +24,12 @@
     background-color: #22abf3;
     color:white;
 }
+
+/*
+@media (max-width: 1280px) {
+    .Button {
+        padding: 0.8vw 1.6vw;
+        font-size: 1.6vw;
+    }
+}
+*/

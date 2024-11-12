@@ -8,6 +8,7 @@ import LoginModal from "../login/LoginModal";
 import LoginContent from "../login/LoginContent";
 import { useState } from "react";
 import MenuItem from "./MenuItem";
+import PageTransition from "../common/PageTransition";
 
 const UserProfile = () => {
     const { currentUser } = useAuthUser();
@@ -18,7 +19,9 @@ const UserProfile = () => {
         <div className="UserProfile">
             {showLogin && (
                 <LoginModal onClose={() => setShowLogin(false)}>
-                <LoginContent onClose={() => setShowLogin(false)} />
+                <PageTransition>
+                    <LoginContent onClose={() => setShowLogin(false)} />
+                </PageTransition>
                 </LoginModal>
             )}
             {currentUser ? (
@@ -45,7 +48,7 @@ const UserProfile = () => {
                     </div>
                 </>
             ) : (
-                <Button text={"Login"} onClick={() => setShowLogin(true)}/>
+                <Button text={"로그인"} onClick={() => setShowLogin(true)}/>
             )}
         </div>
     );

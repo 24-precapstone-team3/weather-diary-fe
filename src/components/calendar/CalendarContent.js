@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./CalendarContent.css";
 import CalendarTile from "./CalendarTile";
 
-const CalendarContent = () => {
+const CalendarContent = ({ diaries }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
 
     // 선택된 월의 날짜 생성

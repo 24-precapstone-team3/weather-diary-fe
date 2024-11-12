@@ -34,5 +34,10 @@
     .UserProfile .content_section {
         font-size: 1.2vw;
     }
+
+    .UserProfile .content_section .menu_wrapper .dropdown_menu {
+        padding: 0.8vw;
+        gap: 0.8vw;
+    }
 }
 
