@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Analize.css'; // 스타일 파일 import
 import imgAnalysis from "../images/img_analysis.png";
@@ -6,6 +6,8 @@ import Button from '../components/common/Button';
 import CalendarHeader from '../components/calendar/CalendarHeader';
 import CalendarBackground from '../components/calendar/CalendarBackground';
 import PageTransition from '../components/common/PageTransition';
+import Swal from 'sweetalert2';
+import { DiaryStateContext } from "../contexts/DiaryContext";
 
 // 해시태그 컴포넌트 정의
 const Hashtag = ({ isActive, onClick, text }) => {
@@ -77,7 +79,8 @@ const Analize = () => {
     const [hashtagMessage, setHashtagMessage] = useState(''); // 해시태그 메시지
     const navigate = useNavigate(); //useHistory 훅 사용
     const location = useLocation(); // 전달된 데이터 가져오기
-    const { entry } = location.state || {}; // New.js에서 전달된 일기 내용
+    const {entry, hashtags} = useContext(DiaryStateContext);
+
 
     // 컴포넌트 마운트 시 모달 열기
     useEffect(() => {
@@ -134,16 +137,52 @@ const Analize = () => {
 
     // 해시태그를 한 글자씩 표시하는 함수
     const displayHashtags = async () => {
-        const hashtags = ['# 행복', '# 슬픔', '# 분노', '# 불안', '# 사랑', '# 평화']; // 해시태그 6개
-        for (let i = 0; i < hashtags.length; i++) {
-            setDisplayedHashtags((prev) => [...prev, hashtags[i]]);
+        const hashtagsList = hashtags || ['# 행복', '# 슬픔', '# 분노', '# 불안', '# 사랑', '# 평화']; // 해시태그 6개
+        for (let i = 0; i < hashtagsList.length; i++) {
+            setDisplayedHashtags((prev) => [...prev, hashtagsList[i]]);
             await new Promise((resolve) => setTimeout(resolve, 300)); // 300ms 대기
         }
     };
 
+    const handleSave = () => {
+        localStorage.setItem('analizeText', displayedMessage); // displayText를 로컬 스토리지에 저장
+        const hashtagsToSave = JSON.stringify(displayedHashtags);
+        localStorage.setItem('savedHashtags', hashtagsToSave);
+        Swal.fire({
+            title: "일기 분석 저장",
+            text: "저장되었습니다!",
+            icon: "success",
+            confirmButtonText: "확인",
+            customClass: {
+                confirmButton: 'no-focus-outline'
+            },
+        });
+    }
+
     // 모달 닫기 핸들러
     const handleClosePopup = () => {
         setIsOpen(false);
+        Swal.fire({
+            title: "저장 안됨",
+            text: "저장하기 않고 닫으시겠습니까?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "닫기",
+            cancelButtonText: "이전",
+            customClass: {
+                confirmButton: 'no-focus-outline',
+                closeButton: 'no-focus-outline'
+            },
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // "닫기" 버튼 클릭 시 calendar.js로 이동
+                navigate('/');
+            } else if (result.isDismissed) {
+                // "이전" 버튼 클릭 시 현재 모달을 닫고 글쓰기 화면으로 돌아감
+                setIsOpen(true); // 모달을 다시 열어줌
+            }
+        });
+
     };
 
     // 해시태그 클릭 핸들러
@@ -192,7 +231,7 @@ const Analize = () => {
                 </div>
                 <div className="analize-button-container">
                     <Button text={"심리상담"} onClick={handleCounselClick} />
-                    <Button text={"저 장"} onClick={handleClosePopup} />
+                    <Button text={"저 장"} onClick={handleSave} />
                     <Button text={"닫 기"} type={"light"} onClick={handleClosePopup} />
                 </div>
                 </PageTransition>
