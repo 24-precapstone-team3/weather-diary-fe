@@ -3,6 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './Analize.css'; // 스타일 파일 import
 import imgAnalysis from "../images/img_analysis.png";
 import Button from '../components/common/Button';
+import CalendarHeader from '../components/calendar/CalendarHeader';
+import CalendarBackground from '../components/calendar/CalendarBackground';
+import PageTransition from '../components/common/PageTransition';
 
 // 해시태그 컴포넌트 정의
 const Hashtag = ({ isActive, onClick, text }) => {
@@ -167,6 +170,7 @@ const Analize = () => {
         <div className="analyze-container">
             {/* 모달 창 */}
             <Modal isOpen={isOpen} onClose={handleClosePopup}>
+            <PageTransition>
             <img src={imgAnalysis} alt="Analysis" className="image-analysis" />
                 <div className="analyze-all">
                     <div className="analyze-message">
@@ -191,7 +195,10 @@ const Analize = () => {
                     <Button text={"저 장"} onClick={handleClosePopup} />
                     <Button text={"닫 기"} type={"light"} onClick={handleClosePopup} />
                 </div>
+                </PageTransition>
             </Modal>
+            <CalendarHeader />
+            <CalendarBackground />
         </div>
     );
 };

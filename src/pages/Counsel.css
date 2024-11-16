@@ -1,10 +1,3 @@
-.counsel-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* 중앙 정렬 */
-    margin: 20px; /* 여백 설정 */
-}
-
 .counsel-all {
     background-color: #F6F6F6; /* 배경색 설정 */
     padding-top: 5px;
@@ -14,11 +7,11 @@
         -2px 0 2px rgba(0, 0, 0, 0.1), /* 왼쪽 그림자 */ 
         2px 4px 10px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
     width: 275px;
-    height: 470px;
+    height: 590px;
+    max-height: 1000px;
     margin-top: 20px;
     margin-left: 20px;
     margin-bottom: 30px;
-    max-height: 500px; /* 최대 높이 설정 (고정된 높이에 맞춰 조정) */
     left: 55px; /* 왼쪽 간격 조정 */
 
     /* 말풍선 모양을 위한 추가 스타일 */

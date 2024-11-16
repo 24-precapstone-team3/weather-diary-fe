@@ -1,0 +1,73 @@
+.CalendarBackground {
+    font-family: "Outfit", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 30px;
+}
+
+.CalendarBackground .calendar_tile {
+    display: flex;
+    height: 100px;
+    font-size: 16px;
+    border: 1px solid #ececec;
+    border-radius: 5px;
+    text-align: initial;
+    padding: 10px;
+}
+
+.CalendarBackground .calendar_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.CalendarBackground .calendar_header div {
+    font-size: 48px;
+    font-weight: bold;
+    color: #565656;
+}
+
+.CalendarBackground .calendar_header button {
+    border: none;
+    background-color: white;
+    font-size: 18px;
+}
+
+.CalendarBackground .calendar_grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    width: 100%;
+}
+
+.CalendarBackground .calendar_grid .calendar_day {
+    font-family: 'S-CoreDream-3Light';
+    text-align: initial;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+@media (max-width: 1280px) {
+    .CalendarBackground .calendar_header div {
+        font-size: 3.75vw;
+    }
+
+    .CalendarBackground .calendar_header button {
+        font-size: 1.4vw;
+    }
+
+    .CalendarBackground .calendar_grid .calendar_day {
+        padding: 0.8vw;
+        font-size: 1.2vw;
+    }
+
+    .CalendarBackground .calendar_tile {
+        font-size: 1.2vw;
+        height: 7.8vw;
+        padding: 0.8vw;
+    }
+}

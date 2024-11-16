@@ -9,13 +9,8 @@
     cursor: pointer;
 }
 
-.new-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 .new-all {
+    font-family: "Outfit", sans-serif;
     background-color: #F6F6F6; /* 배경색 설정 */
     padding: 30px; /* 내부 여백 */
     border-radius: 8px; /* 모서리 둥글게 */
@@ -23,20 +18,29 @@
         -2px 0 2px rgba(0, 0, 0, 0.1), /* 왼쪽 그림자 */ 
         2px 4px 10px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
     width: 300px;
-    height: 470px;
+    height: 520px;
     margin: 20px;
-    max-height: 500px; /* 최대 높이 설정 (고정된 높이에 맞춰 조정) */
-}
-
-.new-header span {
-    font-size: 18px; /* 헤더 글씨 크기 조절 */
-    margin-left: 10px; /* 날짜와 왼쪽 사이의 간격 조정 */
-    margin-top: 5px; /* 필요에 따라 위쪽 마진 추가 */
+    max-height: 520px;
 }
 
 .new-header {
     margin-bottom: 15px; /* 헤더와 텍스트 영역 간의 간격 */
     position: relative; /* 자식 요소의 절대 위치를 위한 상대 위치 설정 */
+    font-weight: bold;
+}
+
+.new-header .date_wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 24px; /* 헤더 글씨 크기 조절 */
+    margin-left: 10px; /* 날짜와 왼쪽 사이의 간격 조정 */
+    margin-top: 5px; /* 필요에 따라 위쪽 마진 추가 */
+}
+
+.new-header .date_wrapper span {
+    font-family: 'S-CoreDream-3Light';
+    font-size: 18px;
 }
 
 .image-pencil {
@@ -49,22 +53,26 @@
 }
 
 .new-textarea {
+    font-family: 'S-CoreDream-3Light';
     width: 95%;
-    height: 330px;
-    margin-bottom: 10px;
+    height: 380px;
+    margin-bottom: 15px;
     padding: 10px ;
     background-color: #F6F6F6; /* 배경색 설정 */
     border: none; /* 경계선 없애기 */
     border-radius: 5px;
     box-shadow: none; /* 필요하다면 그림자 효과도 없앨 수 있습니다. */
     resize: none; /* 크기 조절 불가능하게 설정 */
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0.5px;
 }
-/*
+
 .new-textarea:focus {
-    outline: none; 
+    outline: 1px solid lightgray;
     border: none; 
 }
-*/
+
 
 .upload-label {
     display: flex; /* 아이콘과 텍스트를 가로로 정렬 */
@@ -119,10 +127,10 @@
     padding: 20px;
     border-radius: 8px;
     width: 400px; /* 모달 너비 조절 */
-    height: 650px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    position: relative;
+    position: absolute;
     overflow-y: auto;
+    z-index: 100;
 }
 
 .modal-content {
@@ -132,4 +140,3 @@
 .modal-content:active {
     cursor: grabbing; /* 드래그 중 커서 모양 변경 */
 }
-

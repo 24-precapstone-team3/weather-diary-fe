@@ -5,6 +5,9 @@ import imgPencil from "../images/img_pencil.png";
 import imgFile from "../images/img_file.png";
 import Button from '../components/common/Button';
 import PageTransition from '../components/common/PageTransition';
+import CalendarBackground from '../components/calendar/CalendarBackground';
+import Calendar from './Calendar';
+import CalendarHeader from '../components/calendar/CalendarHeader';
 
 const Modal = ({ isOpen, children, onClose }) => {
     const modalRef = useRef(null);
@@ -39,7 +42,7 @@ const Modal = ({ isOpen, children, onClose }) => {
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
-        >
+        >   
             <div
                 className="modal-content"
                 ref={modalRef}
@@ -105,7 +108,7 @@ const New = () => {
                     <div className="new-all">
                         <div className="new-header">
                             <img src={imgPencil} alt="Pencil" className="image-pencil" />
-                            <span>2024.10.22. 화</span>
+                            <div className="date_wrapper">2024.10.22. <span>화</span></div>
                         </div>
                         <textarea 
                             value={entry} 
@@ -136,6 +139,8 @@ const New = () => {
                     </div>
                 </PageTransition>
             </Modal>
+            <CalendarHeader />
+            <CalendarBackground />
         </div>
     );
 };

@@ -9,6 +9,7 @@ export const DiaryDispatchContext = React.createContext();
 /*
     일기 객체
     {
+        diary_id(db에서 부여됨)
         firebase_uid,
         content,
         date,
@@ -54,9 +55,10 @@ export const DiaryProvider = ({ children }) => {
         }
 
         try {
-            const response = await axios.get("/api/diaries", {
-                params: { firebase_uid: currentUser.firebase_uid },
+            const response = await axios.get("/api/diaries/check", {
+                params: { firebase_uid: currentUser.uid },
             });
+
             dispatch({ type: "INIT", data: response.data });
             sessionStorage.setItem("diary", JSON.stringify(response.data));
         } catch (error) {
@@ -71,7 +73,7 @@ export const DiaryProvider = ({ children }) => {
     const onCreate = async (newData) => {
         try {
             const { firebase_uid, content, date, weather } = newData;
-            const response = await axios.post("/api/diaries", {
+            const response = await axios.post("/api/diaries/create", {
                 firebase_uid,
                 content,
                 date,
@@ -87,13 +89,16 @@ export const DiaryProvider = ({ children }) => {
         }
     };
     
-
     const onUpdate = async (updatedData) => {
         try {
-            await axios.put(`/api/diaries/${updatedData.diary_id}`, updatedData);
+            const response = await axios.post(`/api/diaries/${updatedData.diary_id}/update`, {
+                diaryId: updatedData.diary_id,
+                content: updatedData.content
+            });
+
             dispatch({
                 type: "UPDATE",
-                data: updatedData,
+                data: response.data,
             });
         } catch (error) {
             console.error("Failed to update diary:", error);

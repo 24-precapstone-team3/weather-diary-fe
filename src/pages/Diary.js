@@ -8,11 +8,11 @@ import PageTransition from '../components/common/PageTransition';
 import CalendarHeader from '../components/calendar/CalendarHeader';
 import CalendarBackground from '../components/calendar/CalendarBackground';
 
-const Modal = ({ isOpen, onClose, children }) => {
+const Modal = ({ isOpen, onClose, children, modalWidth }) => {
     const modalRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
-    const [modalPosition, setModalPosition] = useState({ top: 100, left: 100 });
+    const [modalPosition, setModalPosition] = useState({ top: 100, left: 500 });
 
     useEffect(() => {
         const handleMouseMove = (e) => {
@@ -48,10 +48,15 @@ const Modal = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-overlay">
             <div className="modal-content" onClick={(e) => e.stopPropagation()}
                 ref={modalRef} 
-                style={{ top: modalPosition.top, left: modalPosition.left, position: 'absolute' }} // 위치 설정
+                style={{ 
+                    top: modalPosition.top,
+                    left: modalPosition.left,
+                    position: 'absolute',
+                    width: modalWidth 
+                }} // 위치 설정
                 onMouseDown={handleMouseDown} // 드래그 기능 추가
             >
                 <div className="modal-body">
@@ -64,6 +69,8 @@ const Modal = ({ isOpen, onClose, children }) => {
 
 const Diary = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalWidth, setModalWidth] = useState('400px'); //모달 확장
+    const [feedbackVisible, setFeedbackVisible] = useState(false); 
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
@@ -71,6 +78,13 @@ const Diary = () => {
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
+        setModalWidth('400px'); //모달 확장 초기화
+        setFeedbackVisible(false);
+    };
+
+    const handleExpandModal = () => {
+        setModalWidth('800px'); //모달 확장
+        setFeedbackVisible(true);
     };
 
     useEffect(() => {
@@ -80,6 +94,7 @@ const Diary = () => {
     return (
         <div className="container">
                 <Modal isOpen={isModalOpen} onClose={handleCloseModal} modalWidth={modalWidth}>
+                    <PageTransition>
                     <div className='modal-content-wrapper'>
                     <div className="diary-all">
                     <img src={imgBook} alt="book" className="image-book" />
@@ -99,16 +114,19 @@ const Diary = () => {
                             <span className="hashtag3" style={{ backgroundColor: '#52ACFF' }}># 달리기</span>
                         </div>
                     </div>
+                    {feedbackVisible && (
                         <div className="feedback-all">
                             <img src={imgDoctor} alt="doctor" className="image-doctor" />
                             <div className="feedback-message">심리 상담 피드백!</div>
                         </div>
+                    )}
                     </div>
                     <div className="diary-button-container">
                         <Button text={"심리 상담"} onClick={handleExpandModal}/>
                         <Button text={"수 정"} />
                         <Button text={"닫 기"} type={"light"} onClick={handleCloseModal} />
                     </div>
+                    </PageTransition>
                 </Modal>
                 <CalendarHeader />
                 <CalendarBackground />
