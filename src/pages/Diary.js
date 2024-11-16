@@ -4,6 +4,9 @@ import imgBook from "../images/img_book.png";
 import imgSample from "../images/img_sample.png";
 import imgDoctor from "../images/img_doctor.png";
 import Button from '../components/common/Button';
+import PageTransition from '../components/common/PageTransition';
+import CalendarHeader from '../components/calendar/CalendarHeader';
+import CalendarBackground from '../components/calendar/CalendarBackground';
 
 const Modal = ({ isOpen, onClose, children, modalWidth }) => {
     const modalRef = useRef(null);
@@ -91,6 +94,7 @@ const Diary = () => {
     return (
         <div className="container">
                 <Modal isOpen={isModalOpen} onClose={handleCloseModal} modalWidth={modalWidth}>
+                    <PageTransition>
                     <div className='modal-content-wrapper'>
                     <div className="diary-all">
                     <img src={imgBook} alt="book" className="image-book" />
@@ -122,8 +126,10 @@ const Diary = () => {
                         <Button text={"수 정"} />
                         <Button text={"닫 기"} type={"light"} onClick={handleCloseModal} />
                     </div>
+                    </PageTransition>
                 </Modal>
-            
+                <CalendarHeader />
+                <CalendarBackground />
         </div>
     );
 };

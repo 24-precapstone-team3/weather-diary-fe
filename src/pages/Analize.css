@@ -1,11 +1,3 @@
-/* 전체 컨테이너 스타일 */
-.analyze-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* 중앙 정렬 */
-    margin: 20px; /* 여백 설정 */
-}
-
 .image-analysis {
     width: 70px; /* 이미지 너비 */
     height: auto; /* 비율 유지 */
@@ -49,7 +41,9 @@
 .analyze-message {
     padding-left: -15px; /* 상하좌우 px 여백 */
     padding-right: 15px;
-    font-size: 15px; /* 글자 크기 */
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0.5px;
 }
 
 .hashtag-container {
@@ -59,10 +53,12 @@
     margin-bottom: 15px;
 }
 
-.hashtag-message{
-    padding-left: -10px; /* 상하좌우 px 여백 */
+.hashtag-message {
+    padding-left: -10px;
     padding-right: 20px;
-    font-size: 14px; /* 글자 크기 */
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0.5px;
 }
 
 /* 해시태그 스타일 */

@@ -3,6 +3,9 @@ import './Counsel.css'; // 스타일 파일 import
 import imgDoctor from "../images/img_doctor.png";
 import Button from '../components/common/Button';
 import Swal from 'sweetalert2';
+import PageTransition from '../components/common/PageTransition';
+import CalendarHeader from '../components/calendar/CalendarHeader';
+import CalendarBackground from '../components/calendar/CalendarBackground';
 
 // 모달 컴포넌트 정의
 const Modal = ({ isOpen, children }) => {
@@ -112,6 +115,7 @@ const Counsel = () => {
         <div className="counsel-container">
             {/* 모달 창 */}
             <Modal isOpen={isOpen} onClose={handleClosePopup}>
+                <PageTransition>
                 <div className="counsel-all">
                     <div className="counsel-header">
                         <img src={imgDoctor} alt="Doctor" className="image-doctor" />
@@ -124,7 +128,10 @@ const Counsel = () => {
                     <Button text={"저 장"} onClick={handleSave} />
                     <Button text={"닫 기"} type={"light"} onClick={handleClosePopup} />
                 </div>
+                </PageTransition>
             </Modal>
+            <CalendarHeader />
+            <CalendarBackground />
         </div>
     );
 };
