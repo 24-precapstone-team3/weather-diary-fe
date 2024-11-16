@@ -6,7 +6,6 @@ import Button from '../components/common/Button';
 import CalendarHeader from '../components/calendar/CalendarHeader';
 import CalendarBackground from '../components/calendar/CalendarBackground';
 import PageTransition from '../components/common/PageTransition';
-import PageTransition from '../components/common/PageTransition';
 import Swal from 'sweetalert2';
 import { DiaryStateContext } from "../contexts/DiaryContext";
 
