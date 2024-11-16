@@ -4,6 +4,9 @@ import imgBook from "../images/img_book.png";
 import imgSample from "../images/img_sample.png";
 import imgDoctor from "../images/img_doctor.png";
 import Button from '../components/common/Button';
+import PageTransition from '../components/common/PageTransition';
+import CalendarHeader from '../components/calendar/CalendarHeader';
+import CalendarBackground from '../components/calendar/CalendarBackground';
 
 const Modal = ({ isOpen, onClose, children }) => {
     const modalRef = useRef(null);
@@ -76,7 +79,8 @@ const Diary = () => {
 
     return (
         <div className="container">
-                <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                <Modal isOpen={isModalOpen} onClose={handleCloseModal} modalWidth={modalWidth}>
+                    <div className='modal-content-wrapper'>
                     <div className="diary-all">
                     <img src={imgBook} alt="book" className="image-book" />
                         <div className="header">
@@ -99,13 +103,15 @@ const Diary = () => {
                             <img src={imgDoctor} alt="doctor" className="image-doctor" />
                             <div className="feedback-message">심리 상담 피드백!</div>
                         </div>
-                        <div className="diary-button-container">
-                            <Button text={"심리 상담"} />
-                            <Button text={"수 정"} />
-                            <Button text={"닫 기"} type={"light"} onClick={handleCloseModal} />
-                        </div>
+                    </div>
+                    <div className="diary-button-container">
+                        <Button text={"심리 상담"} onClick={handleExpandModal}/>
+                        <Button text={"수 정"} />
+                        <Button text={"닫 기"} type={"light"} onClick={handleCloseModal} />
+                    </div>
                 </Modal>
-            
+                <CalendarHeader />
+                <CalendarBackground />
         </div>
     );
 };
