@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom'; //useHistory 훅 추가
 import './New.css';
 import imgPencil from "../images/img_pencil.png";
@@ -8,6 +8,8 @@ import PageTransition from '../components/common/PageTransition';
 import CalendarBackground from '../components/calendar/CalendarBackground';
 import Calendar from './Calendar';
 import CalendarHeader from '../components/calendar/CalendarHeader';
+import { DiaryStateContext } from '../contexts/DiaryContext';
+import Swal from 'sweetalert2';
 
 const Modal = ({ isOpen, children, onClose }) => {
     const modalRef = useRef(null);
@@ -60,6 +62,8 @@ const New = () => {
     const [filePreview, setFilePreview] = useState(null); // 이미지 미리보기를 위한 상태 추가
     const [isOpen, setIsOpen] = useState(false); // 팝업 열림 상태
     const navigate = useNavigate(); //useHistory 훅 사용
+    const state = useContext(DiaryStateContext);
+    const currentDate = state.date;
 
     useEffect(() => {
         setIsOpen(true); // 컴포넌트가 마운트될 때 모달을 열도록 설정
@@ -96,8 +100,32 @@ const New = () => {
     };
 
     const handleClosePopup = () => {
-        setIsOpen(false);
-        setFilePreview(null); // 팝업 닫을 때 미리보기 초기화
+        if (entry.trim() !== '') {
+            // 작성창에 텍스트가 있을 때
+            Swal.fire({
+                title: "저장 안됨",
+                text: "저장하기 않고 닫으시겠습니까?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "닫기",
+                cancelButtonText: "이전",
+                customClass: {
+                    confirmButton: 'no-focus-outline',
+                    closeButton: 'no-focus-outline'
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // "닫기" 버튼 클릭 시 calendar.js로 이동
+                    navigate('/');
+                } else if (result.isDismissed) {
+                    // "이전" 버튼 클릭 시 현재 모달을 닫고 글쓰기 화면으로 돌아감
+                    setIsOpen(true); // 모달을 다시 열어줌
+                }
+            });
+        } else {
+            // 작성창에 텍스트가 없을 때
+            navigate('/'); // 바로 calendar.js로 이동
+        }
     };
 
     return (
