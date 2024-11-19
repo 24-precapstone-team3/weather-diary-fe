@@ -7,7 +7,7 @@ export const DiaryStateContext = React.createContext();
 export const DiaryDispatchContext = React.createContext();
 
 /*
-    일기 객체
+    일기 배열에 들어가는 각 일기 객체
     {
         diary_id(db에서 부여됨)
         firebase_uid,
@@ -79,14 +79,20 @@ export const DiaryProvider = ({ children }) => {
                 date,
                 weather,
             });
-            
+            /*
             dispatch({
                 type: "CREATE",
                 data: response.data,
             });
+            */
         } catch (error) {
             console.error("Failed to create diary:", error);
         }
+
+        dispatch({
+            type: "CREATE",
+            data: newData,
+        });
     };
     
     const onUpdate = async (updatedData) => {

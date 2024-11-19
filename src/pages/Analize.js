@@ -7,19 +7,8 @@ import CalendarHeader from '../components/calendar/CalendarHeader';
 import CalendarBackground from '../components/calendar/CalendarBackground';
 import PageTransition from '../components/common/PageTransition';
 import Swal from 'sweetalert2';
-import { DiaryStateContext } from "../contexts/DiaryContext";
-
-// 해시태그 컴포넌트 정의
-const Hashtag = ({ isActive, onClick, text }) => {
-    return (
-        <div
-            className={`Hashtag ${isActive ? 'active' : ''}`}
-            onClick={onClick}
-        >
-            {text}
-        </div>
-    );
-};
+import Hashtag from '../components/common/Hashtag';
+import { TagDispatchContext } from '../contexts/TagContext';
 
 // 모달 컴포넌트 정의
 const Modal = ({ isOpen, onClose, children }) => {
@@ -77,15 +66,35 @@ const Analize = () => {
     const [displayedMessage, setDisplayedMessage] = useState(''); // 표시할 메시지
     const [displayedHashtags, setDisplayedHashtags] = useState([]); // 표시할 해시태그
     const [hashtagMessage, setHashtagMessage] = useState(''); // 해시태그 메시지
-    const navigate = useNavigate(); //useHistory 훅 사용
-    const location = useLocation(); // 전달된 데이터 가져오기
-    const {entry, hashtags} = useContext(DiaryStateContext);
+    const { onCreate } = useContext(TagDispatchContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const entry = location.state?.entry || null; // 일기 작성 화면에서 넘어온 일기 텍스트
 
+    // entry는 일기 본문이고 이곳에 백엔드에 저장된 일기 객체 전체 또는 diary_id의 전달이 필요함
+    // 해시태그 저장 시 연결된 백엔드 함수에서 diary_id를 인수로 요구하기 때문임
+    // 심리 상담 피드백에서도 상담 내용 저장을 위해 diary_id가 필요함
 
     // 컴포넌트 마운트 시 모달 열기
     useEffect(() => {
+        if (!entry) {
+            Swal.fire({
+                title: "일기 분석 오류",
+                text: "유효하지 않은 일기 분석입니다",
+                icon: "warning",
+                confirmButtonText: "확인",
+                customClass: {
+                    confirmButton: 'no-focus-outline'
+                },
+                willClose: () => {
+                    navigate("/", { replace: true });
+                }
+            });
+            return;
+        }
+
         setIsOpen(true); // 컴포넌트가 마운트될 때 모달을 열도록 설정
-    }, []); // 빈 배열을 넣어 컴포넌트가 처음 마운트될 때만 실행되도록 함
+    }, [entry]);
 
     // 한 글자씩 표시하기 위한 함수
     useEffect(() => {
@@ -99,7 +108,7 @@ const Analize = () => {
                     displayString += messageArray[index];
                     setDisplayedMessage(displayString); // 이전 문자에 추가
                     index++;
-                    setTimeout(showMessage, 50); // 100ms마다 다음 글자 추가
+                    setTimeout(showMessage, 50); // 50ms마다 다음 글자 추가
                 } else {
                     // 모든 글자가 표시된 후 해시태그 메시지를 표시
                     displayHashtagMessage();
@@ -134,10 +143,9 @@ const Analize = () => {
         showHashtagMessage(); // 해시태그 메시지 표시 시작
     };
         
-
     // 해시태그를 한 글자씩 표시하는 함수
     const displayHashtags = async () => {
-        const hashtagsList = hashtags || ['# 행복', '# 슬픔', '# 분노', '# 불안', '# 사랑', '# 평화']; // 해시태그 6개
+        const hashtagsList = ['# 행복', '# 슬픔', '# 분노', '# 불안', '# 사랑', '# 평화']; // 해시태그 6개
         for (let i = 0; i < hashtagsList.length; i++) {
             setDisplayedHashtags((prev) => [...prev, hashtagsList[i]]);
             await new Promise((resolve) => setTimeout(resolve, 300)); // 300ms 대기
@@ -145,9 +153,16 @@ const Analize = () => {
     };
 
     const handleSave = () => {
+        /*
         localStorage.setItem('analizeText', displayedMessage); // displayText를 로컬 스토리지에 저장
         const hashtagsToSave = JSON.stringify(displayedHashtags);
         localStorage.setItem('savedHashtags', hashtagsToSave);
+        */
+
+        // diary_id가 없어서 임시로 1 전달
+        // 선택한 해시태그가 없으면 빈 배열로 인수가 전달됨(백엔드에서 이 부분 검토 필요)
+        onCreate(activeHashtags, "1");
+
         Swal.fire({
             title: "일기 분석 저장",
             text: "저장되었습니다!",

@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { useNavigate } from 'react-router-dom'; //useHistory 훅 추가
+import { useLocation, useNavigate } from 'react-router-dom';
 import './New.css';
 import imgPencil from "../images/img_pencil.png";
 import imgFile from "../images/img_file.png";
 import Button from '../components/common/Button';
 import PageTransition from '../components/common/PageTransition';
 import CalendarBackground from '../components/calendar/CalendarBackground';
-import Calendar from './Calendar';
 import CalendarHeader from '../components/calendar/CalendarHeader';
-import { DiaryStateContext } from '../contexts/DiaryContext';
+import { DiaryDispatchContext } from '../contexts/DiaryContext';
 import Swal from 'sweetalert2';
+import Loading from '../components/common/Loading';
+import { auth } from '../firebase';
 
 const Modal = ({ isOpen, children, onClose }) => {
     const modalRef = useRef(null);
@@ -61,13 +62,31 @@ const New = () => {
     const [file, setFile] = useState(null);
     const [filePreview, setFilePreview] = useState(null); // 이미지 미리보기를 위한 상태 추가
     const [isOpen, setIsOpen] = useState(false); // 팝업 열림 상태
-    const navigate = useNavigate(); //useHistory 훅 사용
-    const state = useContext(DiaryStateContext);
-    const currentDate = state.date;
+    const { onCreate } = useContext(DiaryDispatchContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const date = location.state?.date || null;
 
     useEffect(() => {
-        setIsOpen(true); // 컴포넌트가 마운트될 때 모달을 열도록 설정
-    }, []); // 빈 배열을 넣어 컴포넌트가 처음 마운트될 때만 실행되도록 함
+        if (!date) {
+            Swal.fire({
+                title: "일기 작성 오류",
+                text: "유효하지 않은 날짜입니다",
+                icon: "warning",
+                confirmButtonText: "확인",
+                customClass: {
+                    confirmButton: 'no-focus-outline'
+                },
+                willClose: () => {
+                    navigate("/", { replace: true });
+                }
+            });
+            return;
+        }
+
+        // 일기 작성 모달 열기
+        setIsOpen(true);
+    }, [date]);
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -87,21 +106,45 @@ const New = () => {
         setEntry(e.target.value);
     };
 
+    // 일기 및 사진 저장 로직
     const handleSave = () => {
         console.log('일기 내용:', entry);
         console.log('업로드된 파일:', file);
-        // 여기서 실제로 저장 로직 추가
+        
+        // 일기 저장
+        onCreate({
+            firebase_uid: auth.currentUser.uid,
+            content: entry,
+            date: date,
+            weather: "맑음" // API에서 가져온 값 필요
+        });
+
+        // 사진 저장 필요
     };
 
+    // 일기분석 버튼 클릭
     const handleAnalyze = () => {
+        // 일기 본문을 작성하지 않은 경우
+        if (entry.trim() === '') {
+            Swal.fire({
+                title: "일기 작성",
+                text: "일기를 작성하지 않으셨습니다",
+                icon: "warning",
+                confirmButtonText: "확인",
+                customClass: {
+                    confirmButton: 'no-focus-outline'
+                },
+            });
+            return;
+        }
         handleSave(); // 저장 후 분석 기능 수행
         console.log('일기 분석 시작'); // 분석 로직 추가
-        navigate('/Analize', {state: {entry, file}}); // 일기 분석 페이지로 이동
+        navigate('/Analize', {state: { entry, file }}); // 일기 분석 페이지로 이동
     };
 
     const handleClosePopup = () => {
-        if (entry.trim() !== '') {
-            // 작성창에 텍스트가 있을 때
+        if (entry.trim() !== '' || file) {
+            // 작성창에 텍스트가 있거나 선택된 사진이 있을 때
             Swal.fire({
                 title: "저장 안됨",
                 text: "저장하기 않고 닫으시겠습니까?",
@@ -128,49 +171,56 @@ const New = () => {
         }
     };
 
-    return (
-        <div className="new-container">
-            {/* 모달 창 */}
-            <Modal isOpen={isOpen} onClose={handleClosePopup} >
-                <PageTransition>
-                    <div className="new-all">
-                        <div className="new-header">
-                            <img src={imgPencil} alt="Pencil" className="image-pencil" />
-                            <div className="date_wrapper">2024.10.22. <span>화</span></div>
-                        </div>
-                        <textarea 
-                            value={entry} 
-                            onChange={handleEntryChange} 
-                            className="new-textarea" 
-                            placeholder="일기를 작성하세요..."
-                        />
-                        <label htmlFor="file-upload" className="upload-label">
-                            <img src={imgFile} alt="Upload" className="image-file" /> 
-                            Click to upload {/* 클릭 시 파일 선택 */}
-                            <input 
-                                type="file" 
-                                onChange={handleFileChange}
-                                className="file-input" 
-                                id="file-upload"
-                                style={{ display: 'none' }} // 숨김 처리
+    if (!date) {
+        return <Loading />
+    } else {
+        return (
+            <div className="new-container">
+                {/* 모달 창 */}
+                <Modal isOpen={isOpen} onClose={handleClosePopup} >
+                    <PageTransition>
+                        <div className="new-all">
+                            <div className="new-header">
+                                <img src={imgPencil} alt="Pencil" className="image-pencil" />
+                                <div className="date_wrapper">
+                                    {`${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}.`}
+                                    <span>{["일", "월", "화", "수", "목", "금", "토"][date.getDay()]}</span>
+                                </div>
+                            </div>
+                            <textarea 
+                                value={entry} 
+                                onChange={handleEntryChange} 
+                                className="new-textarea" 
+                                placeholder="일기를 작성하세요..."
                             />
                             {/* 이미지 미리보기 */}
                             {filePreview && (
-                                <img src={filePreview} alt="File Preview" className="file-preview" />
+                                    <img src={filePreview} alt="File Preview" className="file-preview" />
                             )}
-                        </label>
-                    </div>
-        
-                    <div className="new-button-container"> 
-                        <Button text={"일기분석"} onClick={handleAnalyze} /> 
-                        <Button text={"닫  기"} type={"light"} onClick={handleClosePopup} />
-                    </div>
-                </PageTransition>
-            </Modal>
-            <CalendarHeader />
-            <CalendarBackground />
-        </div>
-    );
+                            <label htmlFor="file-upload" className="upload-label">
+                                <img src={imgFile} alt="Upload" className="image-file" /> 
+                                Click to upload {/* 클릭 시 파일 선택 */}
+                                <input 
+                                    type="file" 
+                                    onChange={handleFileChange}
+                                    className="file-input" 
+                                    id="file-upload"
+                                    style={{ display: 'none' }} // 숨김 처리
+                                />
+                            </label>
+                        </div>
+            
+                        <div className="new-button-container"> 
+                            <Button text={"일기분석"} onClick={handleAnalyze} /> 
+                            <Button text={"닫  기"} type={"light"} onClick={handleClosePopup} />
+                        </div>
+                    </PageTransition>
+                </Modal>
+                <CalendarHeader />
+                <CalendarBackground />
+            </div>
+        );
+    }
 };
 
 export default New;

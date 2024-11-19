@@ -10,6 +10,7 @@ import useAuthUser from './hooks/useAuthUser';
 import Loading from './components/common/Loading';
 import Swal from 'sweetalert2';
 import { DiaryDispatchContext, DiaryProvider, DiaryStateContext } from './contexts/DiaryContext';
+import { TagProvider } from './contexts/TagContext';
 
 function App() {
   const { currentUser, isDataLoaded } = useAuthUser();
@@ -47,15 +48,17 @@ function App() {
   } else {
     return (
       <DiaryProvider>
-        <div className="App">
-          <Routes>
-            <Route path="/" element={<Calendar />} />
-            <Route path="/diary" element={<ProtectedRoute element={<Diary />} />} />
-            <Route path="/new" element={<ProtectedRoute element={<New />} />} />
-            <Route path="/analize" element={<ProtectedRoute element={<Analize />} />} />
-            <Route path="/counsel" element={<ProtectedRoute element={<Counsel />} />} />
-          </Routes>
-        </div>
+        <TagProvider>
+          <div className="App">
+            <Routes>
+              <Route path="/" element={<Calendar />} />
+              <Route path="/diary" element={<ProtectedRoute element={<Diary />} />} />
+              <Route path="/new" element={<ProtectedRoute element={<New />} />} />
+              <Route path="/analize" element={<ProtectedRoute element={<Analize />} />} />
+              <Route path="/counsel" element={<ProtectedRoute element={<Counsel />} />} />
+            </Routes>
+          </div>
+        </TagProvider>
       </DiaryProvider>
     );
   }

@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./CalendarContent.css";
 import CalendarTile from "./CalendarTile";
 
-const CalendarContent = ({ diaries }) => {
+const CalendarContent = ({ diaries, fetchTagsForDiaries }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
+
+    useEffect(() => {
+        const diaryIds = diaries.map((it) => it.diary_id);
+        fetchTagsForDiaries(diaryIds);
+    }, [diaries, fetchTagsForDiaries]);
 
     // 선택된 월의 날짜 생성
     const generateDatesForMonth = (date) => {
@@ -49,9 +54,12 @@ const CalendarContent = ({ diaries }) => {
                 {generateDatesForMonth(currentDate).map((date, idx) => (
                     <CalendarTile 
                         key={idx} 
-                        date={date ? date.getDate() : ""} 
+                        date={date} 
                         isWeekend={date && (date.getDay() === 0 || date.getDay() === 6)}
                         isToday={date && (date.toDateString() === new Date().toDateString())}
+                        diary={diaries.find((diary) => 
+                            date && new Date(diary.date).toDateString() === date.toDateString()
+                        )}
                     />
                 ))}
             </div>

@@ -1,8 +1,13 @@
 import "./Hashtag.css";
 
-const Hashtag = ({ color, text }) => {
+const Hashtag = ({ isActive, onClick, text }) => {
     return (
-        <div className={["Hashtag", `Hashtag_${color}`].join(" ")}>{text}</div>
+        <div
+            className={`Hashtag ${isActive ? 'active' : ''}`}
+            onClick={onClick}
+        >
+            {text}
+        </div>
     );
 };
 

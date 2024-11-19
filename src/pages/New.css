@@ -18,9 +18,7 @@
         -2px 0 2px rgba(0, 0, 0, 0.1), /* 왼쪽 그림자 */ 
         2px 4px 10px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
     width: 300px;
-    height: 520px;
     margin: 20px;
-    max-height: 520px;
 }
 
 .new-header {
@@ -73,7 +71,6 @@
     border: none; 
 }
 
-
 .upload-label {
     display: flex; /* 아이콘과 텍스트를 가로로 정렬 */
     align-items: flex-start; /* 위쪽 정렬 */
@@ -96,9 +93,8 @@
 }
 
 .file-preview {
-    max-width: 60px; /* 원하는 너비로 설정 */
-    max-height: 60px; /* 원하는 높이로 설정 */
-    margin-left: 15px; /* 아이콘과 텍스트 간격 */
+    width: 100%;
+    border-radius: 8px;
 }
 
 .new-button-container {
