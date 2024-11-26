@@ -9,10 +9,24 @@
     transition: background-color 0.3s;
 }
 
+.red-button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-bottom: 20px; /* 버튼과 다른 요소 간 간격 */
+    transition: background-color 0.3s;
+}
+
+.red-button:hover {
+    background-color: #f27474 !important; /* 마우스 오버 시 색상 변경 */
+}
+
 .view-button:hover {
     background-color: #0056b3; /* 마우스 오버 시 색상 변경 */
 }
-
 
 .container {
     width: auto; /* 컨테이너 너비 설정 */
@@ -58,7 +72,7 @@
     box-shadow:
         -2px 0 2px rgba(0, 0, 0, 0.1), /* 왼쪽 그림자 */ 
         2px 4px 10px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
-    width: 300px;
+    width: 275px;
     min-height: 510px;
     height: auto;
     margin: 20px;
@@ -68,8 +82,8 @@
     position: absolute;
     width: 140px; /* 책 이미지 크기 조정 */
     height: auto;
-    left: -20px;
-    top: 0px;
+    left: -40px;
+    top: -25px;
 }
 
 .image-sample {
@@ -122,7 +136,7 @@
     box-shadow:
         -2px 0 2px rgba(0, 0, 0, 0.1), /* 왼쪽 그림자 */ 
         2px 4px 10px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
-    width: 275px;
+    width: 300px;
     max-width: 100%;
     margin: 20px 0;
     left: 75px;
@@ -160,11 +174,11 @@
 }
 
 .diary-button-container {
-    margin-top: auto;
-    padding: 20px;
+    margin-top: 20px;
+    padding: 10px 0 0 0;
     display: flex;
     justify-content: space-between;
-    gap: 20px;
+    gap: 5px;
 }
 
 .modal-overlay {
@@ -184,13 +198,12 @@
     background-color: white;
     border-radius: 8px;
     padding: 20px;
-    width: auto;
-    max-width: 800px;
+    width: 800px;
+    max-width: auto;
     max-height: 1000px;
     height: 80%;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     position: relative;
-    overflow-y: auto;
 }
 
 .modal-content:active {

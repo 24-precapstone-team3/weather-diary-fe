@@ -9,7 +9,9 @@ import PageTransition from '../components/common/PageTransition';
 import CalendarHeader from '../components/calendar/CalendarHeader';
 import CalendarBackground from '../components/calendar/CalendarBackground';
 import { DiaryStateContext } from '../contexts/DiaryContext';
+import Swal from 'sweetalert2';
 
+// Modal 컴포넌트는 생략
 const Modal = ({ isOpen, onClose, children, modalWidth }) => {
     const modalRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -18,7 +20,6 @@ const Modal = ({ isOpen, onClose, children, modalWidth }) => {
 
     useEffect(() => {
         if (isOpen) {
-            // 모달이 열릴 때 화면 중앙에 위치하도록 설정
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
             const modalHeight = modalRef.current ? modalRef.current.offsetHeight : 0;
@@ -62,7 +63,6 @@ const Modal = ({ isOpen, onClose, children, modalWidth }) => {
         });
     };
 
-    // 화면 크기 변경 시 모달 위치 업데이트
     useEffect(() => {
         const handleResize = () => {
             const windowWidth = window.innerWidth;
@@ -85,14 +85,16 @@ const Modal = ({ isOpen, onClose, children, modalWidth }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}
-                ref={modalRef} 
-                style={{ 
+        <div className="modal-overlay" onClick={onClose}>
+            <div
+                className="modal-content"
+                onClick={(e) => e.stopPropagation()}
+                ref={modalRef}
+                style={{
                     top: modalPosition.top,
                     left: modalPosition.left,
                     position: 'absolute',
-                    width: modalWidth 
+                    width: modalWidth,
                 }} // 위치 설정
                 onMouseDown={handleMouseDown} // 드래그 기능 추가
             >
@@ -105,10 +107,11 @@ const Modal = ({ isOpen, onClose, children, modalWidth }) => {
 };
 
 const Diary = () => {
-    const {date, weather, emotion, analysisContent, imgSample, feedbackMessage } = useContext(DiaryStateContext);
+    const [entry, setEntry] = useState('');
+    const { date, weather, emotion, analysisContent, imgSample, feedbackMessage } = useContext(DiaryStateContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalWidth, setModalWidth] = useState('400px'); //모달 확장
-    const [feedbackVisible, setFeedbackVisible] = useState(false); 
+    const [feedbackVisible, setFeedbackVisible] = useState(false);
     const navigate = useNavigate();
 
     const handleOpenModal = () => {
@@ -131,49 +134,73 @@ const Diary = () => {
         navigate('/New'); // 수정 버튼 클릭 시 new.js로 이동 추가
     };
 
+    const handleDelete = () => {
+        if (entry.trim() === '') {
+            Swal.fire({
+                title: "일기 삭제",
+                text: "일기를 정말 삭제하시겠습니까?",
+                icon: "warning",
+                confirmButtonText: "삭제",
+                cancelButtonText: "닫기",
+                showCancelButton: true,
+                customClass: {
+                    confirmButton: 'no-focus-outline',
+                    cancelButton: 'no-focus-outline'
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // 삭제 로직을 여기에 추가합니다.
+                } else if (result.isDismissed) {
+                    setIsModalOpen(true);
+                }
+            });
+            return;
+        }
+    };
+
     useEffect(() => {
         handleOpenModal();
     }, []);
 
     return (
         <div className="container">
-                <Modal isOpen={isModalOpen} onClose={handleCloseModal} modalWidth={modalWidth}>
+            <Modal isOpen={isModalOpen} onClose={handleCloseModal} modalWidth={modalWidth}>
                 <PageTransition>
                     <div className='modal-content-wrapper'>
-                    <div className="diary-all">
-                    <img src={imgBook} alt="book" className="image-book" />
-                        <div className="header">
-                            <div className="date">2024.10.22.화{date}</div>
-                            <div className='weather-emotion'>
-                                <div className="weather">날씨: 맑음{weather}</div>
-                                <div className="emotion">기분: 행복{emotion}</div>
+                        <div className="diary-all">
+                            <img src={imgBook} alt="book" className="image-book" />
+                            <div className="header">
+                                <div className="date">2024.10.22.화{date}</div>
+                                <div className='weather-emotion'>
+                                    <div className="weather">날씨: 맑음{weather}</div>
+                                    <div className="emotion">기분: 행복{emotion}</div>
+                                </div>
+                            </div>
+                            <img src={imgSample} alt="upload" className="image-sample" />
+                            <div className="analysis-content">분석된 일기 내용...{analysisContent}</div>
+                            <div className="hashtags">
+                                <span className="hashtag1" style={{ backgroundColor: '#FCC3CC' }}># 달리기</span>
+                                <span className="hashtag2" style={{ backgroundColor: '#DBBEFC' }}># 달리기</span>
+                                <span className="hashtag3" style={{ backgroundColor: '#52ACFF' }}># 달리기</span>
                             </div>
                         </div>
-                        <img src={imgSample} alt="upload" className="image-sample" />
-                        <div className="analysis-content">분석된 일기 내용...{analysisContent}
-                        </div>
-                        <div className="hashtags">
-                            <span className="hashtag1" style={{ backgroundColor: '#FCC3CC' }}># 달리기</span>
-                            <span className="hashtag2" style={{ backgroundColor: '#DBBEFC' }}># 달리기</span>
-                            <span className="hashtag3" style={{ backgroundColor: '#52ACFF' }}># 달리기</span>
-                        </div>
-                    </div>
-                    {feedbackVisible && (
-                        <div className="feedback-all">
-                            <img src={imgDoctor} alt="doctor" className="image-doctor" />
-                            <div className="feedback-message">심리 상담 피드백!{feedbackMessage}</div>
-                        </div>
-                    )}
+                        {feedbackVisible && (
+                            <div className="feedback-all">
+                                <img src={imgDoctor} alt="doctor" className="image-doctor" />
+                                <div className="feedback-message">심리 상담 피드백!{feedbackMessage}</div>
+                            </div>
+                        )}
                     </div>
                     <div className="diary-button-container">
-                        <Button text={"심리 상담"} onClick={handleExpandModal}/>
-                        <Button text={"수 정"} onClick={handleEdit}/>
+                        <Button text={"심리상담"} onClick={handleExpandModal}/>
+                        <Button text={"삭 제"} className="red-button" onClick={handleDelete} />
+                        <Button text={"수 정"} onClick={handleEdit} />
                         <Button text={"닫 기"} type={"light"} onClick={handleCloseModal} />
                     </div>
-                    </PageTransition>
-                </Modal>
-                <CalendarHeader />
-                <CalendarBackground />
+                </PageTransition>
+            </Modal>
+            <CalendarHeader />
+            <CalendarBackground />
         </div>
     );
 };

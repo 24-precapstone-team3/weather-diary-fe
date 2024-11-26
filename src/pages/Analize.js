@@ -153,12 +153,7 @@ const Analize = () => {
     };
 
     const handleSave = () => {
-        /*
-        localStorage.setItem('analizeText', displayedMessage); // displayText를 로컬 스토리지에 저장
-        const hashtagsToSave = JSON.stringify(displayedHashtags);
-        localStorage.setItem('savedHashtags', hashtagsToSave);
-        */
-
+        
         // diary_id가 없어서 임시로 1 전달
         // 선택한 해시태그가 없으면 빈 배열로 인수가 전달됨(백엔드에서 이 부분 검토 필요)
         onCreate(activeHashtags, "1");
