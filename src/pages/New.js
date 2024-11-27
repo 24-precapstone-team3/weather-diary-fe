@@ -191,7 +191,7 @@ const New = () => {
             });
         } else {
             // 작성창에 텍스트가 없을 때
-            navigate('/'); // 바로 calendar.js로 이동
+            navigate("/"); // 바로 calendar.js로 이동
         }
     };
 

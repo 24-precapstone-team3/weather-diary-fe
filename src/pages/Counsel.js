@@ -66,7 +66,6 @@ const Counsel = () => {
     const [counselFeedback, setCounselFeedback] = useState(''); // 심리 상담 피드백 메시지
     const [displayFeedback, setdisplayFeedback] = useState(''); // 표시할 심리 상담 피드백
     const fullText = "심리 상담 피드백!"; // 전체 텍스트
-    const [isSaved, setIsSaved] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const newDiary = location.state?.newDiary || null;
@@ -141,8 +140,6 @@ const Counsel = () => {
 
     // 저장 핸들러
     const handleSave = () => {
-        // localStorage.setItem('feedbackText', displayText); // displayText를 로컬 스토리지에 저장
-
         saveCounsel(newDiary.diary_id, counselFeedback);
 
         Swal.fire({
@@ -153,36 +150,35 @@ const Counsel = () => {
             customClass: {
                 confirmButton: 'no-focus-outline'
             },
+            willClose: () => {
+                navigate("/", { replace: true });
+            }
         });
     };
 
     // 모달 닫기 핸들러
     const handleClosePopup = () => {
-        if (isSaved) {
-            setIsOpen(false); // 저장된 경우 모달을 닫음
-        } else {
-            Swal.fire({
-                title: "저장 안됨",
-                text: "저장하기 않고 닫으시겠습니까?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "닫기",
-                cancelButtonText: "이전",
-                customClass: {
-                    confirmButton: 'no-focus-outline',
-                    closeButton: 'no-focus-outline',
-                },
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // "닫기" 버튼 클릭 시 calendar.js로 이동
-                    navigate('/');
-                } else if (result.isDismissed) {
-                    // "이전" 버튼 클릭 시 현재 모달을 닫고 글쓰기 화면으로 돌아감
-                    setIsOpen(true); // 모달을 다시 열어줌
-                }
-            });
-        }
-    };
+        Swal.fire({
+            title: "저장 안됨",
+            text: "저장하기 않고 닫으시겠습니까?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "닫기",
+            cancelButtonText: "이전",
+            customClass: {
+                confirmButton: 'no-focus-outline',
+                closeButton: 'no-focus-outline',
+            },
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // "닫기" 버튼 클릭 시 calendar.js로 이동
+                navigate("/");
+            } else if (result.isDismissed) {
+                // "이전" 버튼 클릭 시 현재 모달을 닫고 글쓰기 화면으로 돌아감
+                setIsOpen(true); // 모달을 다시 열어줌
+            }
+        });
+    }
 
     if (!newDiary || isCounseling) {
         return <Loading />

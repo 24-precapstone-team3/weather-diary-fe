@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import axios from "axios";
 import { auth } from "../firebase";
-import { apiBaseUrl } from "../utils";
 
 // 일기 데이터를 저장하고 불러오는데 쓰이는 context
 export const DiaryStateContext = React.createContext();

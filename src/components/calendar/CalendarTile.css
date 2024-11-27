@@ -1,12 +1,14 @@
 .CalendarTile {
     cursor: pointer;
     display: flex;
-    height: 100px;
+    flex-direction: column;
+    height: 140px;
     font-size: 16px;
     border: 1px solid #ececec;
     border-radius: 5px;
     text-align: initial;
     padding: 10px;
+    gap: 10px;
 }
 
 .CalendarTile_weekend {
@@ -26,14 +28,36 @@
     font-weight: bold;
 }
 
+.CalendarTile .tag_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.CalendarTile .tag_wrapper .tag {
+    font-family: 'S-CoreDream-3Light';
+    font-size: 14px;
+    background-color: lightcoral;
+    color: white;
+    padding: 2px;
+    letter-spacing: 1px;
+    border-radius: 5px;
+}
+
 @media (max-width: 1280px) {
     .CalendarTile {
         font-size: 1.2vw;
-        height: 7.8vw;
+        height: 11vw;
         padding: 0.8vw;
+        gap: 0.8vw;
     }
 
     .CalendarTile .date_wrapper {
         font-size: 1.5vw;
+    }
+
+    .CalendarTile .tag_wrapper .tag {
+        font-size: 1.1vw;
+        padding: 0.2vw;
     }
 }

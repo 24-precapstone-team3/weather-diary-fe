@@ -8,7 +8,7 @@ const CalendarContent = ({ diaries, fetchTagsForDiaries }) => {
     useEffect(() => {
         const diaryIds = diaries.map((it) => it.diary_id);
         fetchTagsForDiaries(diaryIds);
-    }, [diaries, fetchTagsForDiaries]);
+    }, [diaries]);
 
     // 선택된 월의 날짜 생성
     const generateDatesForMonth = (date) => {

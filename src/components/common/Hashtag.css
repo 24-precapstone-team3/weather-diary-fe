@@ -8,7 +8,6 @@
     background-color: #e0e0e0; /* 기본 배경색 */
     cursor: pointer; /* 포인터 커서 */
     transition: background-color 0.3s, color 0.3s; /* 호버 시 색상 변경 효과 */
-    
 }
 
 .Hashtag.active {

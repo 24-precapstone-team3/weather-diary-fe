@@ -180,15 +180,37 @@ const Analysis = () => {
 
         showHashtagMessage();
     };
-        
-    const handleSave = () => {
-        /*
-        localStorage.setItem('analizeText', displayedMessage); // displayText를 로컬 스토리지에 저장
-        const hashtagsToSave = JSON.stringify(displayedHashtags);
-        localStorage.setItem('savedHashtags', hashtagsToSave);
-        */
 
-        // 선택한 해시태그가 없으면 빈 배열로 인수가 전달됨(백엔드에서는 해시태그 없으면 오류 발생했던 것 같음)
+    // 해시태그 클릭 핸들러
+    const handleHashtagClick = (text) => {
+        setActiveHashtags((prev) => {
+            // 이미 선택된 해시태그가 있을 경우 제거
+            if (prev.includes(text)) {
+                return prev.filter((hashtag) => hashtag !== text);
+            }
+            // 최대 3개까지 선택 가능
+            if (prev.length < 3) {
+                return [...prev, text];
+            }
+            return prev; // 3개 이상은 추가하지 않음
+        });
+    };
+
+    // 해시태그 저장
+    const handleSave = () => {
+        if (activeHashtags.length <= 0) {
+            Swal.fire({
+                title: "해시태그 선택",
+                text: "최소 1개를 선택해주세요",
+                icon: "warning",
+                confirmButtonText: "확인",
+                customClass: {
+                    confirmButton: 'no-focus-outline'
+                },
+            });
+            return;
+        }
+        console.log(activeHashtags);
         onCreate(activeHashtags, newDiary.diary_id);
 
         Swal.fire({
@@ -200,6 +222,18 @@ const Analysis = () => {
                 confirmButton: 'no-focus-outline'
             },
         });
+    }
+
+    // 저장 후 심리 상담 페이지로 이동
+    const handleCounselClick = () => {
+        handleSave();
+        navigate("/counsel", { state: { newDiary } });
+    };
+
+    // 심리 상담을 하지 않고 태시태그만 저장
+    const handleSaveOnly = () => {
+        handleSave();
+        navigate("/");
     }
 
     // 모달 닫기 핸들러
@@ -226,26 +260,6 @@ const Analysis = () => {
             }
         });
 
-    };
-
-    // 해시태그 클릭 핸들러
-    const handleHashtagClick = (text) => {
-        setActiveHashtags((prev) => {
-            // 이미 선택된 해시태그가 있을 경우 제거
-            if (prev.includes(text)) {
-                return prev.filter((hashtag) => hashtag !== text);
-            }
-            // 최대 3개까지 선택 가능
-            if (prev.length < 3) {
-                return [...prev, text];
-            }
-            return prev; // 3개 이상은 추가하지 않음
-        });
-    };
-
-    // 심리 상담 버튼 클릭 핸들러
-    const handleCounselClick = () => {
-        navigate('/counsel', { state: { newDiary } }); // 심리 상담 페이지로 이동
     };
 
     if (!newDiary || isAnalyzing) {
@@ -277,7 +291,7 @@ const Analysis = () => {
                     </div>
                     <div className="analysis-button-container">
                         <Button text={"심리상담"} onClick={handleCounselClick} />
-                        <Button text={"저 장"} onClick={handleSave} />
+                        <Button text={"저 장"} onClick={handleSaveOnly} />
                         <Button text={"닫 기"} type={"light"} onClick={handleClosePopup} />
                     </div>
                     </PageTransition>
