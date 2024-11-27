@@ -6,7 +6,7 @@
     top: 10px; /* 세로 중앙으로 맞추기 */
 }
 
-.analyze-all {
+.analysis-all {
     background-color: #F6F6F6; /* 배경색 설정 */
     padding-top: 5px;
     padding-left: 20px; /* 내부 여백 */
@@ -28,7 +28,7 @@
 }
 
 /* 말풍선 꼬리 부분 */
-.analyze-all::after {
+.analysis-all::after {
     content: ''; /* 내용을 비워두어야 함 */
     position: absolute; /* 절대 위치 설정 */
     top: 10px; /* 모달의 세로 중앙에 위치하도록 설정 */
@@ -38,7 +38,7 @@
     border-color: transparent #F6F6F6 transparent transparent; /* 왼쪽을 향하는 말풍선 색상 */         
 }
 
-.analyze-message {
+.analysis-message {
     padding-left: -15px; /* 상하좌우 px 여백 */
     padding-right: 15px;
     font-size: 16px;
@@ -62,7 +62,7 @@
 }
 
 /* 버튼 컨테이너 스타일 */
-.analize-button-container {
+.analysis-button-container {
     padding: 20px;
     display: flex;
     justify-content: space-between;

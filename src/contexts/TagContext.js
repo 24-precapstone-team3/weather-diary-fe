@@ -1,6 +1,7 @@
 import React, { useReducer } from "react";
-import useAuthUser from "../hooks/useAuthUser";
 import axios from "axios";
+import { auth } from "../firebase";
+import { apiBaseUrl } from "../utils";
 
 export const TagStateContext = React.createContext();
 export const TagDispatchContext = React.createContext();
@@ -30,16 +31,21 @@ const reducer = (action, state) => {
 
 export const TagProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, []);
-    const { currentUser } = useAuthUser();
 
     const fetchTagsForDiaries = async (diaryIds) => {
-        if (!currentUser || diaryIds.length <= 0) {
+        if (!auth.currentUser || diaryIds.length <= 0) {
             return;
         }
 
         try {
             const tagPromises = diaryIds.map((id) => 
-                axios.get(`/api/tag/${id}`).then((res) => ({ id, tags: res.data }))
+                axios.get(`http://13.124.144.246:3000/api/tag/${id}`,
+                    {
+                        headers: {
+                            "firebase-uid": auth.currentUser.uid
+                        }
+                    }
+                ).then((res) => ({ id, tags: res.data }))
             );
 
             const tagsData = await Promise.all(tagPromises);
@@ -47,6 +53,8 @@ export const TagProvider = ({ children }) => {
                 type: "INIT",
                 data: tagsData
             });
+            console.log("tags fetched");
+            console.log(state);
         } catch (error) {
             console.log(error);
         }
@@ -55,25 +63,26 @@ export const TagProvider = ({ children }) => {
     const onCreate = async (tags, diary_id) => {
         try {
             // tags는 ["# 행복", "# 사랑"] 과 같이 사용자가 선택한 해시태그 배열
-            await axios.post("/api/tag", {
-                tags,
-                diary_id
-            });
+            await axios.post(`http://13.124.144.246:3000/api/tag`,
+                {
+                    tags,
+                    diary_id
+                },
+                {
+                    headers: {
+                        "firebase-uid": auth.currentUser.uid,
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
 
-            /*
             dispatch({
                 type: "CREATE",
                 data: { id: diary_id, tags }
             });
-            */
         } catch (error) {
             console.log(error);
         }
-
-        dispatch({
-            type: "CREATE",
-            data: { id: diary_id, tags }
-        });
     };
 
     return (
@@ -82,5 +91,5 @@ export const TagProvider = ({ children }) => {
                 {children}
             </TagDispatchContext.Provider>
         </TagStateContext.Provider>
-    )
+    );
 };

@@ -3,6 +3,11 @@
     align-items: center;
     justify-content: end;
     gap: 10px;
+    border: 1px solid #ececec;
+    border-radius: 5px;
+    box-sizing: border-box;
+    height: 100%;
+    padding: 10px;
 }
 
 .UserProfile img {
@@ -18,7 +23,7 @@
 
 .UserProfile .content_section .menu_wrapper .dropdown_menu {
     position: absolute;
-    transform: translateX(-80%);
+    transform: translate(-80%, 32%);
     background-color: white;
     border: 1px solid #e1e1e1;
     border-radius: 5px;

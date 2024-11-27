@@ -10,7 +10,7 @@ import CalendarHeader from '../components/calendar/CalendarHeader';
 import { DiaryDispatchContext } from '../contexts/DiaryContext';
 import Swal from 'sweetalert2';
 import Loading from '../components/common/Loading';
-import { auth } from '../firebase';
+import { getFormattedDate, uploadPhoto } from '../utils';
 
 const Modal = ({ isOpen, children, onClose }) => {
     const modalRef = useRef(null);
@@ -72,7 +72,7 @@ const New = () => {
             Swal.fire({
                 title: "일기 작성 오류",
                 text: "유효하지 않은 날짜입니다",
-                icon: "warning",
+                icon: "error",
                 confirmButtonText: "확인",
                 customClass: {
                     confirmButton: 'no-focus-outline'
@@ -107,23 +107,33 @@ const New = () => {
     };
 
     // 일기 및 사진 저장 로직
-    const handleSave = () => {
-        console.log('일기 내용:', entry);
-        console.log('업로드된 파일:', file);
+    const handleSave = async () => {
+        console.log('일기 내용: ', entry);
+        console.log('업로드된 파일: ', file);
         
-        // 일기 저장
-        onCreate({
-            firebase_uid: auth.currentUser.uid,
-            content: entry,
-            date: date,
-            weather: "맑음" // API에서 가져온 값 필요
-        });
+        // 반환값(새로운 일기 객체) 활용을 위해 await 사용
+        try {
+            const newDiary = await onCreate(entry, getFormattedDate(date), "seoul");
 
-        // 사진 저장 필요
+            if (file) {
+                uploadPhoto(file, newDiary.diary_id);
+            }
+
+            return newDiary;
+        } catch (error) {
+            console.log(error);
+            // 임시 데이터 반환
+            return {
+                diary_id: "temp",
+                content: `일기 저장 오류\n${entry}`,
+                date: getFormattedDate(date),
+                city: "seoul"
+            };
+        }
     };
 
     // 일기분석 버튼 클릭
-    const handleAnalyze = () => {
+    const handleAnalyze = async () => {
         // 일기 본문을 작성하지 않은 경우
         if (entry.trim() === '') {
             Swal.fire({
@@ -137,9 +147,23 @@ const New = () => {
             });
             return;
         }
-        handleSave(); // 저장 후 분석 기능 수행
-        console.log('일기 분석 시작'); // 분석 로직 추가
-        navigate('/Analize', {state: { entry, file }}); // 일기 분석 페이지로 이동
+
+        try {
+            const newDiary = await handleSave();
+            console.log(newDiary);
+            //navigate('/analysis', { state: { newDiary } }); // 일기 분석 페이지로 이동
+        } catch (error) {
+            console.log(error);
+            Swal.fire({
+                title: "오류",
+                text: "일기 저장 중 오류가 발생했습니다",
+                icon: "error",
+                confirmButtonText: "확인",
+                customClass: {
+                    confirmButton: 'no-focus-outline'
+                },
+            });
+        }
     };
 
     const handleClosePopup = () => {

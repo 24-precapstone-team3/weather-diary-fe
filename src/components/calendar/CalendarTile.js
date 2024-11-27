@@ -8,8 +8,8 @@ const CalendarTile = ({ date, isWeekend, isToday, diary }) => {
     const navigate = useNavigate();
 
     const handleCalendarTileClick = () => {
-        diary ? navigate(`/diary/${diary.diary_id}`) :
-        navigate("/new", { state: { date: date } })
+        diary ? navigate(`/diary/${diary.diary_id}`, { state: { diary } }) :
+        navigate("/new", { state: { date } })
     };
 
     return (

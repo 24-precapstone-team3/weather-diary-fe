@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { auth } from "../firebase";
 import axios from "axios";
+import { apiBaseUrl } from "../utils";
 
 const useAuthUser = () => {
     const [currentUser, setCurrentUser] = useState(null);
@@ -8,26 +9,27 @@ const useAuthUser = () => {
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
-            setCurrentUser(currentUser);
+            if (currentUser) {
+                setCurrentUser(currentUser);
 
-            /*
-            try {
-                // 엔드포인트 없었던 것 같음
-                const response = await axios.post("/api/users/find", {
-                    firebase_uid: currentUser.uid
-                });
-
-                // db에 해당 유저가 없으면 생성
-                if (!response.data || response.data.length === 0) {
-                    await axios.post("/api/users/create", {
-                        firebase_uid: currentUser.uid
-                    });
-                    console.log("new user regd");
+                try {
+                    const response = await axios.post(`http://13.124.144.246:3000/api/users/create`,
+                        {
+                            firebase_uid: currentUser.uid
+                        },
+                        {
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+                        }
+                    );
+                    console.log(response.data);
+                } catch (error) {
+                    console.log(error);
                 }
-            } catch (error) {
-                console.log(error);
+            } else {
+                setCurrentUser(null);
             }
-            */
 
             setIsDataLoaded(true);
         });

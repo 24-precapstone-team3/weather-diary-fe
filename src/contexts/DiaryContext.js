@@ -1,21 +1,11 @@
 import React, { useEffect, useReducer } from "react";
-import useAuthUser from "../hooks/useAuthUser";
 import axios from "axios";
+import { auth } from "../firebase";
+import { apiBaseUrl } from "../utils";
 
 // 일기 데이터를 저장하고 불러오는데 쓰이는 context
 export const DiaryStateContext = React.createContext();
 export const DiaryDispatchContext = React.createContext();
-
-/*
-    일기 배열에 들어가는 각 일기 객체
-    {
-        diary_id(db에서 부여됨)
-        firebase_uid,
-        content,
-        date,
-        weather
-    }
-*/
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -23,14 +13,12 @@ const reducer = (state, action) => {
             return action.data;
         case "CREATE": {
             const newState = [action.data, ...state];
-            sessionStorage.setItem("diary", JSON.stringify(newState));
             return newState;
         }
         case "UPDATE": {
             const newState = state.map((it) => 
                 it.diary_id === action.data.diary_id ? { ...action.data } : it
             );
-            sessionStorage.setItem("diary", JSON.stringify(newState));
             return newState;
         }
         default:
@@ -40,27 +28,27 @@ const reducer = (state, action) => {
 
 export const DiaryProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, []);
-    const { currentUser } = useAuthUser();
 
     const fetchDiaries = async () => {
-        if (!currentUser) return;
-
-        const rawData = sessionStorage.getItem("diary");
-        if (rawData) {
-            const localData = JSON.parse(rawData);
-            if (localData.length > 0) {
-                dispatch({ type: "INIT", data: localData });
-                return;
-            }
+        if (!auth.currentUser) {
+            return;
         }
 
         try {
-            const response = await axios.get("/api/diaries/check", {
-                params: { firebase_uid: currentUser.uid },
-            });
+            const response = await axios.get(`http://13.124.144.246:3000/api/diaries/check`,
+                {
+                    headers: {
+                        "firebase-uid": auth.currentUser.uid
+                    },
+                }
+            );
 
-            dispatch({ type: "INIT", data: response.data });
-            sessionStorage.setItem("diary", JSON.stringify(response.data));
+            dispatch({
+                type: "INIT",
+                data: response.data
+            });
+            console.log("diaries fetched");
+            console.log(state);
         } catch (error) {
             console.error("Failed to fetch diaries:", error);
         }
@@ -68,39 +56,45 @@ export const DiaryProvider = ({ children }) => {
 
     useEffect(() => {
         fetchDiaries();
-    }, [currentUser]);
+    }, [auth.currentUser]);
 
-    const onCreate = async (newData) => {
+    const onCreate = async (content, date, city) => {
         try {
-            const { firebase_uid, content, date, weather } = newData;
-            const response = await axios.post("/api/diaries/create", {
-                firebase_uid,
-                content,
-                date,
-                weather,
-            });
-            /*
-            dispatch({
-                type: "CREATE",
-                data: response.data,
-            });
-            */
+            const response = await axios.post(`http://13.124.144.246:3000/api/diaries/create`,
+                {
+                    content,
+                    date,
+                    city
+                },
+                {
+                    headers: {
+                        "firebase-uid": auth.currentUser.uid,
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
+            
+            if (response.data) {
+                dispatch({
+                    type: "CREATE",
+                    data: response.data
+                });
+
+                return response.data;
+            }
         } catch (error) {
             console.error("Failed to create diary:", error);
         }
 
-        dispatch({
-            type: "CREATE",
-            data: newData,
-        });
+        return {};
     };
     
     const onUpdate = async (updatedData) => {
         try {
-            const response = await axios.post(`/api/diaries/${updatedData.diary_id}/update`, {
-                diaryId: updatedData.diary_id,
-                content: updatedData.content
-            });
+            const response = await axios.post(`http://13.124.144.246:3000/api/diaries/${updatedData.diary_id}/update`,
+                { diaryId: updatedData.diary_id, content: updatedData.content },
+                { headers: { 'firebase-uid': updatedData.firebase_uid } }
+            );
 
             dispatch({
                 type: "UPDATE",
