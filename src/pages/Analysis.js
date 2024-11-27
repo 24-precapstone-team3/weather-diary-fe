@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './Analize.css'; // 스타일 파일 import
+import './Analysis.css'; // 스타일 파일 import
 import imgAnalysis from "../images/img_analysis.png";
 import Button from '../components/common/Button';
 import CalendarHeader from '../components/calendar/CalendarHeader';
@@ -9,6 +9,8 @@ import PageTransition from '../components/common/PageTransition';
 import Swal from 'sweetalert2';
 import Hashtag from '../components/common/Hashtag';
 import { TagDispatchContext } from '../contexts/TagContext';
+import Loading from '../components/common/Loading';
+import { analyzeDiary } from '../utils';
 
 // 모달 컴포넌트 정의
 const Modal = ({ isOpen, onClose, children }) => {
@@ -60,45 +62,66 @@ const Modal = ({ isOpen, onClose, children }) => {
     );
 };
 
-const Analize = () => {
+const Analysis = () => {
     const [isOpen, setIsOpen] = useState(false); // 팝업 열림 상태
-    const [activeHashtags, setActiveHashtags] = useState([]); // 활성화된 해시태그 상태
+    const [isAnalyzing, setIsAnalyzing] = useState(true); // 분석 진행 상태
     const [displayedMessage, setDisplayedMessage] = useState(''); // 표시할 메시지
-    const [displayedHashtags, setDisplayedHashtags] = useState([]); // 표시할 해시태그
     const [hashtagMessage, setHashtagMessage] = useState(''); // 해시태그 메시지
+    const [generatedHashtags, setGeneratedHashtags] = useState([]); // 분석을 통해 생성된 해시태그
+    const [displayedHashtags, setDisplayedHashtags] = useState([]); // 표시할 해시태그
+    const [activeHashtags, setActiveHashtags] = useState([]); // 활성화된 해시태그 상태
     const { onCreate } = useContext(TagDispatchContext);
     const navigate = useNavigate();
     const location = useLocation();
-    const entry = location.state?.entry || null; // 일기 작성 화면에서 넘어온 일기 텍스트
+    const newDiary = location.state?.newDiary || null;
+    const entry = newDiary?.content || ""; // 일기 작성 화면에서 넘어온 일기 텍스트
 
-    // entry는 일기 본문이고 이곳에 백엔드에 저장된 일기 객체 전체 또는 diary_id의 전달이 필요함
-    // 해시태그 저장 시 연결된 백엔드 함수에서 diary_id를 인수로 요구하기 때문임
-    // 심리 상담 피드백에서도 상담 내용 저장을 위해 diary_id가 필요함
-
-    // 컴포넌트 마운트 시 모달 열기
+    // 전달된 일기 분석 진행, 완료 시 모달 열기
     useEffect(() => {
-        if (!entry) {
-            Swal.fire({
-                title: "일기 분석 오류",
-                text: "유효하지 않은 일기 분석입니다",
-                icon: "warning",
-                confirmButtonText: "확인",
-                customClass: {
-                    confirmButton: 'no-focus-outline'
-                },
-                willClose: () => {
-                    navigate("/", { replace: true });
-                }
-            });
-            return;
-        }
+        const performAnalysis = async () => {
+            if (!newDiary) {
+                Swal.fire({
+                    title: "일기 분석 오류",
+                    text: "일기가 존재하지 않습니다",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    customClass: {
+                        confirmButton: 'no-focus-outline'
+                    },
+                    willClose: () => navigate("/", { replace: true })
+                });
+                return;
+            }
 
-        setIsOpen(true); // 컴포넌트가 마운트될 때 모달을 열도록 설정
-    }, [entry]);
+            try {
+                const { mood, date, hashTag } = await analyzeDiary(entry);
+                const hashtagsArray = hashTag.split(',').map(tag => `# ${tag.trim()}`);
+                setGeneratedHashtags(hashtagsArray);
+                console.log("분석 결과:", { mood, date, hashTag });
+            } catch (error) {
+                console.log(error);
+                Swal.fire({
+                    title: "일기 분석 오류",
+                    text: "일기 분석 중 오류가 발생했습니다",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    customClass: {
+                        confirmButton: 'no-focus-outline'
+                    },
+                    willClose: () => navigate("/", { replace: true })
+                });
+            } finally {
+                setIsAnalyzing(false); // 분석 완료
+                setIsOpen(true); // 모달 열기
+            }
+        };
+
+        performAnalysis();
+    }, [newDiary]);
 
     // 한 글자씩 표시하기 위한 함수
     useEffect(() => {
-        if(typeof entry === 'string'){
+        if (typeof entry === 'string') {
             const messageArray = entry.split(''); // 일기 내용을 한 글자씩 나누기
             let displayString = '';
             let index = 0;
@@ -145,11 +168,18 @@ const Analize = () => {
         
     // 해시태그를 한 글자씩 표시하는 함수
     const displayHashtags = async () => {
-        const hashtagsList = ['# 행복', '# 슬픔', '# 분노', '# 불안', '# 사랑', '# 평화']; // 해시태그 6개
+        /*
+        const hashtagsList = ['# 행복', '# 슬픔', '# 분노', '# 불안', '# 사랑', '# 평화'];
         for (let i = 0; i < hashtagsList.length; i++) {
             setDisplayedHashtags((prev) => [...prev, hashtagsList[i]]);
             await new Promise((resolve) => setTimeout(resolve, 300)); // 300ms 대기
         }
+        */
+
+        for (const hashtag of generatedHashtags) {
+            setDisplayedHashtags((prev) => [...prev, hashtag]);
+            await new Promise(resolve => setTimeout(resolve, 300)); // 300ms 대기
+        }        
     };
 
     const handleSave = () => {
@@ -159,9 +189,8 @@ const Analize = () => {
         localStorage.setItem('savedHashtags', hashtagsToSave);
         */
 
-        // diary_id가 없어서 임시로 1 전달
-        // 선택한 해시태그가 없으면 빈 배열로 인수가 전달됨(백엔드에서 이 부분 검토 필요)
-        onCreate(activeHashtags, "1");
+        // 선택한 해시태그가 없으면 빈 배열로 인수가 전달됨(백엔드에서는 해시태그 없으면 오류 발생했던 것 같음)
+        onCreate(activeHashtags, newDiary.diary_id);
 
         Swal.fire({
             title: "일기 분석 저장",
@@ -215,46 +244,50 @@ const Analize = () => {
         });
     };
 
-    // 심리상담 버튼 클릭 핸들러
+    // 심리 상담 버튼 클릭 핸들러
     const handleCounselClick = () => {
-        navigate('/Counsel'); // Counsel.js로 이동
+        navigate('/counsel', { state: { newDiary } }); // 심리 상담 페이지로 이동
     };
 
-    return (
-        <div className="analyze-container">
-            {/* 모달 창 */}
-            <Modal isOpen={isOpen} onClose={handleClosePopup}>
-            <PageTransition>
-            <img src={imgAnalysis} alt="Analysis" className="image-analysis" />
-                <div className="analyze-all">
-                    <div className="analyze-message">
-                        <p>{displayedMessage}</p>
-                    </div>
-                    <div className="hashtag-container">
-                        <div className="hashtag-message">
-                            <p>{hashtagMessage}</p>
+    if (!newDiary || isAnalyzing) {
+        return <Loading />
+    } else {
+        return (
+            <div className="analysis-container">
+                {/* 모달 창 */}
+                <Modal isOpen={isOpen} onClose={handleClosePopup}>
+                <PageTransition>
+                <img src={imgAnalysis} alt="Analysis" className="image-analysis" />
+                    <div className="analysis-all">
+                        <div className="analysis-message">
+                            <p>{displayedMessage}</p>
                         </div>
-                        {displayedHashtags.map((hashtag, index) => (
-                            <Hashtag
-                                key={index}
-                                text={hashtag}
-                                isActive={activeHashtags.includes(hashtag)}
-                                onClick={() => handleHashtagClick(hashtag)}
-                            />
-                        ))}
+                        <div className="hashtag-container">
+                            <div className="hashtag-message">
+                                <p>{hashtagMessage}</p>
+                            </div>
+                            {displayedHashtags.map((hashtag, index) => (
+                                <Hashtag
+                                    key={index}
+                                    text={hashtag}
+                                    isActive={activeHashtags.includes(hashtag)}
+                                    onClick={() => handleHashtagClick(hashtag)}
+                                />
+                            ))}
+                        </div>
                     </div>
-                </div>
-                <div className="analize-button-container">
-                    <Button text={"심리상담"} onClick={handleCounselClick} />
-                    <Button text={"저 장"} onClick={handleSave} />
-                    <Button text={"닫 기"} type={"light"} onClick={handleClosePopup} />
-                </div>
-                </PageTransition>
-            </Modal>
-            <CalendarHeader />
-            <CalendarBackground />
-        </div>
-    );
+                    <div className="analysis-button-container">
+                        <Button text={"심리상담"} onClick={handleCounselClick} />
+                        <Button text={"저 장"} onClick={handleSave} />
+                        <Button text={"닫 기"} type={"light"} onClick={handleClosePopup} />
+                    </div>
+                    </PageTransition>
+                </Modal>
+                <CalendarHeader />
+                <CalendarBackground />
+            </div>
+        );
+    }
 };
 
-export default Analize;
+export default Analysis;
