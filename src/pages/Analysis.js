@@ -67,6 +67,7 @@ const Analysis = () => {
     const [isAnalyzing, setIsAnalyzing] = useState(true); // 분석 진행 상태
     const [displayedMessage, setDisplayedMessage] = useState(''); // 표시할 메시지
     const [hashtagMessage, setHashtagMessage] = useState(''); // 해시태그 메시지
+    const [isHashtagsVisible, setIsHashtagsVisible] = useState(false); // 해시태그 출력 트리거
     const [generatedHashtags, setGeneratedHashtags] = useState([]); // 분석을 통해 생성된 해시태그
     const [displayedHashtags, setDisplayedHashtags] = useState([]); // 표시할 해시태그
     const [activeHashtags, setActiveHashtags] = useState([]); // 활성화된 해시태그 상태
@@ -94,10 +95,10 @@ const Analysis = () => {
             }
 
             try {
-                const { mood, date, hashTag } = await analyzeDiary(entry);
-                const hashtagsArray = hashTag.split(',').map(tag => `# ${tag.trim()}`);
+                const { mood, hashTag } = await analyzeDiary(entry);
+                const hashtagsArray = hashTag.split(" ").map(tag => `${tag.trim()}`);
                 setGeneratedHashtags(hashtagsArray);
-                console.log("분석 결과:", { mood, date, hashTag });
+                console.log("분석 결과:", { mood, hashTag });
             } catch (error) {
                 console.log(error);
                 Swal.fire({
@@ -119,36 +120,51 @@ const Analysis = () => {
         performAnalysis();
     }, [newDiary]);
 
-    // 한 글자씩 표시하기 위한 함수
     useEffect(() => {
-        if (typeof entry === 'string') {
-            const messageArray = entry.split(''); // 일기 내용을 한 글자씩 나누기
+        const displayHashtags = async () => {
+            // 생성된 해시태그 배열을 1개씩 표시
+            for (const hashtag of generatedHashtags) {
+                setDisplayedHashtags((prev) => [...prev, hashtag]);
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+        };
+
+        // 해시태그가 있을 때만 실행
+        if (isHashtagsVisible && generatedHashtags.length > 0) {
+            displayHashtags();
+        }
+    }, [isHashtagsVisible, generatedHashtags]);
+
+    // 일기 내용 한 글자씩 표시
+    useEffect(() => {
+        if (typeof entry === "string") {
+            const messageArray = entry.split("");
             let displayString = '';
             let index = 0;
 
             const showMessage = () => {
                 if (index < messageArray.length) {
                     displayString += messageArray[index];
-                    setDisplayedMessage(displayString); // 이전 문자에 추가
+                    setDisplayedMessage(displayString);
                     index++;
-                    setTimeout(showMessage, 50); // 50ms마다 다음 글자 추가
+                    setTimeout(showMessage, 50);
                 } else {
-                    // 모든 글자가 표시된 후 해시태그 메시지를 표시
+                    // 모든 글자가 표시된 후 해시태그 메시지 표시
                     displayHashtagMessage();
                 }
             };
 
             showMessage();
         } else {
-            setDisplayedMessage('');
+            setDisplayedMessage("");
         }
     }, [entry]);
 
     // 해시태그 메시지 한 글자씩 표시
     const displayHashtagMessage = () =>{
-        const message = "너의 일기를 분석한 키워드야. 저장하고 싶은 키워드를 최대 3개만 선택해줘."; // 해시태그 메시지 내용
-        const messageArray = message.split(''); // 메시지를 한 글자씩 나누기
-        let displayString = '';
+        const message = "너의 일기를 분석한 키워드야. 저장하고 싶은 키워드를 최대 3개만 선택해줘.";
+        const messageArray = message.split("");
+        let displayString = "";
         let index = 0;
 
         const showHashtagMessage = () => {
@@ -156,32 +172,15 @@ const Analysis = () => {
                 displayString += messageArray[index];
                 setHashtagMessage(displayString);
                 index++;
-                setTimeout(showHashtagMessage, 50); // 50ms마다 다음 글자 추가
+                setTimeout(showHashtagMessage, 50);
             } else {
-                // 모든 해시태그 메시지가 표시된 후 해시태그를 표시
-                displayHashtags();
+                setIsHashtagsVisible(true);
             }
         };
 
-        showHashtagMessage(); // 해시태그 메시지 표시 시작
+        showHashtagMessage();
     };
         
-    // 해시태그를 한 글자씩 표시하는 함수
-    const displayHashtags = async () => {
-        /*
-        const hashtagsList = ['# 행복', '# 슬픔', '# 분노', '# 불안', '# 사랑', '# 평화'];
-        for (let i = 0; i < hashtagsList.length; i++) {
-            setDisplayedHashtags((prev) => [...prev, hashtagsList[i]]);
-            await new Promise((resolve) => setTimeout(resolve, 300)); // 300ms 대기
-        }
-        */
-
-        for (const hashtag of generatedHashtags) {
-            setDisplayedHashtags((prev) => [...prev, hashtag]);
-            await new Promise(resolve => setTimeout(resolve, 300)); // 300ms 대기
-        }        
-    };
-
     const handleSave = () => {
         /*
         localStorage.setItem('analizeText', displayedMessage); // displayText를 로컬 스토리지에 저장
@@ -220,7 +219,7 @@ const Analysis = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 // "닫기" 버튼 클릭 시 calendar.js로 이동
-                navigate('/');
+                navigate("/");
             } else if (result.isDismissed) {
                 // "이전" 버튼 클릭 시 현재 모달을 닫고 글쓰기 화면으로 돌아감
                 setIsOpen(true); // 모달을 다시 열어줌
