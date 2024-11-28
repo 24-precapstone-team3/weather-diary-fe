@@ -55,7 +55,8 @@
 
 .weather-emotion {
     display: flex;
-    gap: 50px;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .weather, .emotion {

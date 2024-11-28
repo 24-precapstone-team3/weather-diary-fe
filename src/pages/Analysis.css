@@ -1,29 +1,31 @@
 .image-analysis {
-    width: 70px; /* 이미지 너비 */
-    height: auto; /* 비율 유지 */
+    inline-size: 70px; /* 이미지 너비 */
+    block-size: auto; /* 비율 유지 */
     position: relative; /* 절대 위치 설정 */
-    left: -5px; /* 모달의 왼쪽에 위치하도록 조정 */
-    top: 10px; /* 세로 중앙으로 맞추기 */
+    inset-inline-start: -5px; /* 모달의 왼쪽에 위치하도록 조정 */
+    inset-block-start: 10px; /* 세로 중앙으로 맞추기 */
 }
 
 .analysis-all {
     background-color: #F6F6F6; /* 배경색 설정 */
-    padding-top: 5px;
-    padding-left: 20px; /* 내부 여백 */
+    padding-block-start: 5px;
+    padding-inline-start: 20px; /* 내부 여백 */
     border-radius: 8px; /* 모서리 둥글게 */
     box-shadow:
         -2px 0 2px rgba(0, 0, 0, 0.1), /* 왼쪽 그림자 */ 
         2px 4px 10px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
-    width: 280px;
-    min-height: 590px;
-    margin-top: -55px;
-    margin-left: 35px;
-    margin-bottom: 30px;
-    left: 55px; /* 왼쪽 간격 조정 */
+    inline-size: 280px;
+    min-block-size: 540px;
+    margin-block-start: -55px;
+    margin-inline-start: 35px;
+    margin-block-end: 30px;
+    inset-inline-start: 55px; /* 왼쪽 간격 조정 */
     overflow-y: auto; /* 세로 방향 스크롤 활성화 */
 
     /* 말풍선 모양을 위한 추가 스타일 */
     position: relative; /* 위치 속성 추가 */
+    display: flex;
+    flex-direction: column;
 
 }
 
@@ -31,16 +33,16 @@
 .analysis-all::after {
     content: ''; /* 내용을 비워두어야 함 */
     position: absolute; /* 절대 위치 설정 */
-    top: 10px; /* 모달의 세로 중앙에 위치하도록 설정 */
-    right: 100%; /* 모달의 왼쪽에 위치 */
+    inset-block-start: 10px; /* 모달의 세로 중앙에 위치하도록 설정 */
+    inset-inline-end: 100%; /* 모달의 왼쪽에 위치 */
     border-width: 15px; /* 삼각형의 크기 증가 */
     border-style: solid; /* 경계선을 설정 */
     border-color: transparent #F6F6F6 transparent transparent; /* 왼쪽을 향하는 말풍선 색상 */         
 }
 
 .analysis-message {
-    padding-left: -15px; /* 상하좌우 px 여백 */
-    padding-right: 15px;
+    padding-inline-start: -15px; /* 상하좌우 px 여백 */
+    padding-inline-end: 15px;
     font-size: 16px;
     line-height: 1.5;
     letter-spacing: 0.5px;
@@ -49,16 +51,23 @@
 .hashtag-container {
     display: flex;
     flex-wrap: wrap; /* 줄 바꿈 허용 */
-    margin-top: 10px; /* 메시지와 해시태그 사이 간격 */
-    margin-bottom: 15px;
+    margin-block-start: 10px; /* 메시지와 해시태그 사이 간격 */
+    margin-block-end: 15px;
+    gap: 4px;
 }
 
 .hashtag-message {
-    padding-left: -10px;
-    padding-right: 20px;
+    background-color: rgba(0, 123, 255, 0.9);
+    border-radius: 10px;
+    margin-inline-end: 10px;
+    padding-inline-start: 10px;
+    padding-inline-end: 20px;
+    padding-block-start: -5px;
+    padding-block-end: -5px;
     font-size: 16px;
     line-height: 1.5;
     letter-spacing: 0.5px;
+    color: white;
 }
 
 /* 버튼 컨테이너 스타일 */
@@ -67,15 +76,17 @@
     display: flex;
     justify-content: space-between;
     gap: 20px;
+    position: sticky; /* 절대 위치 설정 */
+    inset-block-end: 0; /* 하단에 고정 */ 
 }
 
 /* 모달 오버레이 스타일 */
 .modal-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    inset-block-end: 0;
     background-color: rgba(0, 0, 0, 0.5); /* 반투명 검정색 */
     display: flex;
     align-items: center;
@@ -88,5 +99,5 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     padding: 20px;
-    width: 400px; /* 모바일에서도 잘 보이도록 반응형 */
+    inline-size: 400px; /* 모바일에서도 잘 보이도록 반응형 */
 }
