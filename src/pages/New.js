@@ -151,7 +151,7 @@ const New = () => {
         try {
             const newDiary = await handleSave();
             console.log(newDiary);
-            //navigate('/analysis', { state: { newDiary } }); // 일기 분석 페이지로 이동
+            navigate('/analysis', { state: { newDiary } }); // 일기 분석 페이지로 이동
         } catch (error) {
             console.log(error);
             Swal.fire({
@@ -191,7 +191,7 @@ const New = () => {
             });
         } else {
             // 작성창에 텍스트가 없을 때
-            navigate('/'); // 바로 calendar.js로 이동
+            navigate("/"); // 바로 calendar.js로 이동
         }
     };
 

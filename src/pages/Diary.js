@@ -10,7 +10,7 @@ import CalendarHeader from '../components/calendar/CalendarHeader';
 import CalendarBackground from '../components/calendar/CalendarBackground';
 import { DiaryStateContext } from '../contexts/DiaryContext';
 import Loading from '../components/common/Loading';
-import { getCounselByDiaryId, getFormattedDate } from '../utils';
+import { getCounselByDiaryId, getDateForDisplay, getPhotoByDiaryId } from '../utils';
 import Swal from 'sweetalert2';
 
 // Modal 컴포넌트는 생략
@@ -114,12 +114,13 @@ const Diary = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [modalWidth, setModalWidth] = useState('400px'); //모달 확장
+    const [photoURL, setPhotoURL] = useState(""); // 사진 URL
     const [feedbackVisible, setFeedbackVisible] = useState(false);
-    const [hashtags, setHashtags] = useState([]);
-    const [counselFeedback, setCounselFeedback] = useState(''); // 심리 상담 피드백 메시지
+    const [feedbackMsg, setFeedbackMsg] = useState(''); // 심리 상담 피드백 메시지
     const navigate = useNavigate();
     const location = useLocation();
     const diary = location.state?.diary || null;
+    const diaryTags = location.state?.diaryTags || null;
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
@@ -180,10 +181,17 @@ const Diary = () => {
             }
 
             try {
-                const feedback = await getCounselByDiaryId(diary.diary_id);
-                setCounselFeedback(feedback);
+                // 심리 상담 피드백 가져오기
+                const feedbackData = await getCounselByDiaryId(diary.diary_id);
+                if (feedbackData) {
+                    setFeedbackMsg(feedbackData[0].feedback);
+                }
 
-                
+                // 사진 URL 가져오기
+                const photoData = await getPhotoByDiaryId(diary.diary_id);
+                if (photoData) {
+                    setPhotoURL(photoData[0].file_path);
+                }
             } catch (error) {
                 console.log(error);
                 Swal.fire({
@@ -208,7 +216,7 @@ const Diary = () => {
     if (!diary || isLoading) {
         return <Loading />
     } else {
-        const { dateForDisplay, dayOfWeek } = getFormattedDate(diary.date);
+        const { dateForDisplay, dayOfWeek } = getDateForDisplay(diary.date);
         return (
             <div className="container">
                     <Modal isOpen={isModalOpen} onClose={handleCloseModal} modalWidth={modalWidth}>
@@ -226,21 +234,24 @@ const Diary = () => {
                                     <div className="emotion">{`기분: ${diary.emotion}`}</div>
                                 </div>
                             </div>
-                            <img src={imgSample} alt="upload" className="image-sample" />
+                            <img src={photoURL || imgSample} alt="upload" className="image-sample" />
                             <div className="analysis-content">
                                 {diary.content}
                             </div>
                             <div className="hashtags">
-                                <span className="hashtag1" style={{ backgroundColor: '#FCC3CC' }}># 달리기</span>
-                                <span className="hashtag2" style={{ backgroundColor: '#DBBEFC' }}># 달리기</span>
-                                <span className="hashtag3" style={{ backgroundColor: '#52ACFF' }}># 달리기</span>
+                                <span className="hashtag1" style={{ backgroundColor: "#fcc3cc" }}>{diaryTags[0]}</span>
+                                <span className="hashtag2" style={{ backgroundColor: "#dbbefc" }}>{diaryTags[1]}</span>
+                                <span className="hashtag3" style={{ backgroundColor: "#52acff" }}>{diaryTags[2]}</span>
                             </div>
                         </div>
                         {feedbackVisible && (
                             <div className="feedback-all">
                                 <img src={imgDoctor} alt="doctor" className="image-doctor" />
-                                <div className="feedback-message">심리 상담 피드백!</div>
-                                <p className="feedback">{counselFeedback}</p>
+
+                                <div className="feedback-message">
+                                    <p className="text">심리 상담 피드백!</p>
+                                    <p className="feedback">{feedbackMsg}</p>
+                                </div>
                             </div>
                         )}
                     </div>

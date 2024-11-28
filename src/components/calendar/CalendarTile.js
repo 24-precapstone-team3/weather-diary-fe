@@ -5,10 +5,12 @@ import { TagStateContext } from "../../contexts/TagContext";
 
 const CalendarTile = ({ date, isWeekend, isToday, diary }) => {
     const tags = useContext(TagStateContext);
+    const diaryTags = tags.find((tag) => tag.id === diary?.diary_id)?.tags || []; // id와 일치하는 태그 필터링
+    const tagColor = ["#fcc3cc", "#dbbefc", "#52acff"];
     const navigate = useNavigate();
 
     const handleCalendarTileClick = () => {
-        diary ? navigate(`/diary/${diary.diary_id}`, { state: { diary } }) :
+        diary ? navigate(`/diary/${diary.diary_id}`, { state: { diary, diaryTags } }) :
         navigate("/new", { state: { date } })
     };
 
@@ -22,10 +24,10 @@ const CalendarTile = ({ date, isWeekend, isToday, diary }) => {
             {...(date && { onClick: handleCalendarTileClick })}
         >
             <div className="date_wrapper">{date ? date.getDate() : ""}</div>
-            {diary && tags[diary.diary_id] && (
+            {diary && diaryTags.length > 0 && (
                 <div className="tag_wrapper">
-                    {tags[diary.diary_id].map((tag, idx) => (
-                        <div key={idx} className="tag">#{tag}</div>
+                    {diaryTags.map((tag, idx) => (
+                        <div key={idx} className="tag" style={{ backgroundColor: `${tagColor[idx]}`}}>{tag}</div>
                     ))}
                 </div>
             )}

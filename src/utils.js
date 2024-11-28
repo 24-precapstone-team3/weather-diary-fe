@@ -97,7 +97,7 @@ export const uploadPhoto = async (file, diaryId) => {
             {
                 headers: {
                     "firebase-uid": auth.currentUser.uid,
-                    "Content-Type": "application/json"
+                    //"Content-Type": "application/json"
                 }
             }
         );

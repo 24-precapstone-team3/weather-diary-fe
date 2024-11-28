@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { auth } from "../firebase";
 import axios from "axios";
-import { apiBaseUrl } from "../utils";
 
 const useAuthUser = () => {
     const [currentUser, setCurrentUser] = useState(null);
