@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./CalendarContent.css";
 import CalendarTile from "./CalendarTile";
 
-const CalendarContent = ({ diaries, fetchTagsForDiaries }) => {
+const CalendarContent = ({ diaries, fetchTagsForDiaries, searchKeyword }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
 
     useEffect(() => {
@@ -14,7 +14,6 @@ const CalendarContent = ({ diaries, fetchTagsForDiaries }) => {
     const generateDatesForMonth = (date) => {
         const year = date.getFullYear();
         const month = date.getMonth();
-
         const firstDayOfMonth = new Date(year, month, 1);
         const lastDayOfMonth = new Date(year, month + 1, 0);
 
@@ -60,6 +59,7 @@ const CalendarContent = ({ diaries, fetchTagsForDiaries }) => {
                         diary={diaries.find((diary) => 
                             date && new Date(diary.date).toDateString() === date.toDateString()
                         )}
+                        searchKeyword={searchKeyword}
                     />
                 ))}
             </div>

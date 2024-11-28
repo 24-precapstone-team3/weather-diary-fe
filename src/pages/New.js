@@ -10,7 +10,7 @@ import CalendarHeader from '../components/calendar/CalendarHeader';
 import { DiaryDispatchContext } from '../contexts/DiaryContext';
 import Swal from 'sweetalert2';
 import Loading from '../components/common/Loading';
-import { getFormattedDate, uploadPhoto } from '../utils';
+import { getFormattedDate, uploadPhoto} from '../utils';
 
 const Modal = ({ isOpen, children, onClose }) => {
     const modalRef = useRef(null);
@@ -221,6 +221,7 @@ const New = () => {
                             {filePreview && (
                                     <img src={filePreview} alt="File Preview" className="file-preview" />
                             )}
+                            
                             <label htmlFor="file-upload" className="upload-label">
                                 <img src={imgFile} alt="Upload" className="image-file" /> 
                                 Click to upload {/* 클릭 시 파일 선택 */}
