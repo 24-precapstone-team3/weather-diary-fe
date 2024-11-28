@@ -8,12 +8,9 @@ import Button from '../components/common/Button';
 import PageTransition from '../components/common/PageTransition';
 import CalendarHeader from '../components/calendar/CalendarHeader';
 import CalendarBackground from '../components/calendar/CalendarBackground';
-<<<<<<< HEAD
 import { DiaryStateContext } from '../contexts/DiaryContext';
-=======
 import Loading from '../components/common/Loading';
 import { getCounselByDiaryId, getFormattedDate } from '../utils';
->>>>>>> donghyeon
 import Swal from 'sweetalert2';
 
 // Modal 컴포넌트는 생략
@@ -112,21 +109,14 @@ const Modal = ({ isOpen, onClose, children, modalWidth }) => {
 };
 
 const Diary = () => {
-<<<<<<< HEAD
     const [entry, setEntry] = useState('');
     const { date, weather, emotion, analysisContent, imgSample, feedbackMessage } = useContext(DiaryStateContext);
-=======
->>>>>>> donghyeon
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [modalWidth, setModalWidth] = useState('400px'); //모달 확장
-<<<<<<< HEAD
     const [feedbackVisible, setFeedbackVisible] = useState(false);
-=======
-    const [feedbackVisible, setFeedbackVisible] = useState(false); 
     const [hashtags, setHashtags] = useState([]);
     const [counselFeedback, setCounselFeedback] = useState(''); // 심리 상담 피드백 메시지
->>>>>>> donghyeon
     const navigate = useNavigate();
     const location = useLocation();
     const diary = location.state?.diary || null;
@@ -189,24 +179,6 @@ const Diary = () => {
                 return;
             }
 
-<<<<<<< HEAD
-    return (
-        <div className="container">
-            <Modal isOpen={isModalOpen} onClose={handleCloseModal} modalWidth={modalWidth}>
-                <PageTransition>
-                    <div className='modal-content-wrapper'>
-                        <div className="diary-all">
-                            <img src={imgBook} alt="book" className="image-book" />
-                            <div className="header">
-                                <div className="date">2024.10.22.화{date}</div>
-                                <div className='weather-emotion'>
-                                    <div className="weather">날씨: 맑음{weather}</div>
-                                    <div className="emotion">기분: 행복{emotion}</div>
-                                </div>
-                            </div>
-                            <img src={imgSample} alt="upload" className="image-sample" />
-                            <div className="analysis-content">분석된 일기 내용...{analysisContent}</div>
-=======
             try {
                 const feedback = await getCounselByDiaryId(diary.diary_id);
                 setCounselFeedback(feedback);
@@ -258,7 +230,6 @@ const Diary = () => {
                             <div className="analysis-content">
                                 {diary.content}
                             </div>
->>>>>>> donghyeon
                             <div className="hashtags">
                                 <span className="hashtag1" style={{ backgroundColor: '#FCC3CC' }}># 달리기</span>
                                 <span className="hashtag2" style={{ backgroundColor: '#DBBEFC' }}># 달리기</span>
@@ -268,8 +239,8 @@ const Diary = () => {
                         {feedbackVisible && (
                             <div className="feedback-all">
                                 <img src={imgDoctor} alt="doctor" className="image-doctor" />
-<<<<<<< HEAD
-                                <div className="feedback-message">심리 상담 피드백!{feedbackMessage}</div>
+                                <div className="feedback-message">심리 상담 피드백!</div>
+                                <p className="feedback">{counselFeedback}</p>
                             </div>
                         )}
                     </div>
@@ -285,27 +256,7 @@ const Diary = () => {
             <CalendarBackground />
         </div>
     );
-=======
-                                <div className="feedback-message">
-                                    <p className="text">심리 상담 피드백!</p>
-                                    <p className="feedback">{counselFeedback}</p>
-                                </div>
-                            </div>
-                        )}
-                        </div>
-                        <div className="diary-button-container">
-                            <Button text={"심리 상담"} onClick={handleExpandModal}/>
-                            <Button text={"수 정"} onClick={handleEdit}/>
-                            <Button text={"닫 기"} type={"light"} onClick={handleCloseModal} />
-                        </div>
-                        </PageTransition>
-                    </Modal>
-                    <CalendarHeader />
-                    <CalendarBackground />
-            </div>
-        );
-    }
->>>>>>> donghyeon
+}
 };
 
 export default Diary;

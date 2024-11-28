@@ -116,7 +116,7 @@ const Analysis = () => {
             }
         };
 
-        performAnalysis();
+        performAnalysis(); 
     }, [newDiary]);
 
     // 한 글자씩 표시하기 위한 함수
@@ -183,12 +183,8 @@ const Analysis = () => {
     };
 
     const handleSave = () => {
-<<<<<<< HEAD:src/pages/Analize.js
-        
-        // diary_id가 없어서 임시로 1 전달
-        // 선택한 해시태그가 없으면 빈 배열로 인수가 전달됨(백엔드에서 이 부분 검토 필요)
-        onCreate(activeHashtags, "1");
-=======
+
+
         /*
         localStorage.setItem('analizeText', displayedMessage); // displayText를 로컬 스토리지에 저장
         const hashtagsToSave = JSON.stringify(displayedHashtags);
@@ -197,7 +193,6 @@ const Analysis = () => {
 
         // 선택한 해시태그가 없으면 빈 배열로 인수가 전달됨(백엔드에서는 해시태그 없으면 오류 발생했던 것 같음)
         onCreate(activeHashtags, newDiary.diary_id);
->>>>>>> donghyeon:src/pages/Analysis.js
 
         Swal.fire({
             title: "일기 분석 저장",
