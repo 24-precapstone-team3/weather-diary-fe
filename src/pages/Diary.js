@@ -189,6 +189,7 @@ const Diary = () => {
 
                 // 사진 URL 가져오기
                 const photoData = await getPhotoByDiaryId(diary.diary_id);
+                console.log('photodata:', photoData);
                 if (photoData) {
                     setPhotoURL(photoData[0].file_path);
                 }

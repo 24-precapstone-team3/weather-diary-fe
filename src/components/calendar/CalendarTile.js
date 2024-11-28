@@ -3,7 +3,7 @@ import "./CalendarTile.css";
 import { useContext } from "react";
 import { TagStateContext } from "../../contexts/TagContext";
 
-const CalendarTile = ({ date, isWeekend, isToday, diary }) => {
+const CalendarTile = ({ date, isWeekend, isToday, diary, searchKeyword }) => {
     const tags = useContext(TagStateContext);
     const diaryTags = tags.find((tag) => tag.id === diary?.diary_id)?.tags || []; // id와 일치하는 태그 필터링
     const tagColor = ["#fcc3cc", "#dbbefc", "#52acff"];
@@ -14,13 +14,16 @@ const CalendarTile = ({ date, isWeekend, isToday, diary }) => {
         navigate("/new", { state: { date } })
     };
 
+    const hasMatchingTag = searchKeyword && diaryTags.some((tag) => tag.includes(searchKeyword));
+
     return (
         <div
             className={[
                 "CalendarTile",
                 `CalendarTile_${isWeekend ? "weekend" : "weekdays"}`,
-                `CalendarTile_${isToday ? "today" : ""}`].join(" ")
-            }
+                `CalendarTile_${isToday ? "today" : ""}`,
+                hasMatchingTag ? "CalendarTile_highlight" : "",
+            ].join(" ")}
             {...(date && { onClick: handleCalendarTileClick })}
         >
             <div className="date_wrapper">{date ? date.getDate() : ""}</div>
