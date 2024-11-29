@@ -246,7 +246,7 @@ const Diary = () => {
                                     <div className="emotion">{`기분: ${diary.emotion}`}</div>
                                 </div>
                             </div>
-                            <img src={photoURL || imgSample} alt="upload" className="image-sample" />
+                            {photoURL && <img src={photoURL} alt="IMAGE" className="image-sample" /> }
                             <div className="analysis-content">
                                 {diary.content}
                             </div>
