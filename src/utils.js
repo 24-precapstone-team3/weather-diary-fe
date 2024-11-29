@@ -1,4 +1,4 @@
-import { faAngleDown, faGear, faHashtag, faMagnifyingGlass, faPhone, faPowerOff, faUser, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faHashtag, faLocationArrow, faMagnifyingGlass, faPhone, faPowerOff, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { auth } from "./firebase";
 import axios from "axios";
 
@@ -9,20 +9,11 @@ export const icons = {
     faHashtag,
     faXmark,
     faMagnifyingGlass,
-    faAngleDown
+    faAngleDown,
+    faLocationArrow
 };
 
 export const menuItems = [
-    {
-        icon: faUser,
-        content: "Profile",
-        onClick: () => console.log("사용자 프로필")
-    },
-    {
-        icon: faGear,
-        content: "Setting",
-        onClick: () => console.log("설정")
-    },
     {
         icon: faPowerOff,
         content: "Logout",
@@ -66,7 +57,12 @@ export const toIntlPhoneNumber = (input) => {
     return intlPhoneNumber;
 };
 
-// db에서 가져온 2024-11-27 형식을 2024.11.27 수 와 같이 표시하기 위한 변환 함수
+export const processHashtags = (hashTag) => {
+    const tags = hashTag.match(/[\w가-힣]+/g) || [];
+    return tags.map(tag => `#${tag.trim()}`);
+};
+
+// db에서 가져온 2024-11-27 형식을 2024.11.27. 수 와 같이 표시하기 위한 변환 함수
 export const getDateForDisplay = (dateString) => {
     const date = new Date(dateString);
 
@@ -76,7 +72,7 @@ export const getDateForDisplay = (dateString) => {
     const dayOfWeek = ["일", "월", "화", "수", "목", "금", "토"][date.getDay()];
 
     return {
-        dateForDisplay: `${year}.${month}.${day}`,
+        dateForDisplay: `${year}.${month}.${day}.`,
         dayOfWeek,
     };
 };

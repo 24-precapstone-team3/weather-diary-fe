@@ -20,6 +20,10 @@ const reducer = (state, action) => {
             );
             return newState;
         }
+        case "DELETE": {
+            const newState = state.filter((it) => it.diary_id != action.diary_id);
+            return newState;
+        }
         default:
             return state;
     }
@@ -57,7 +61,7 @@ export const DiaryProvider = ({ children }) => {
         fetchDiaries();
     }, [auth.currentUser]);
 
-    const onCreate = async (content, date, city) => {
+    const onCreateDiary = async (content, date, city) => {
         try {
             const response = await axios.post(`http://13.124.144.246:3000/api/diaries/create`,
                 {
@@ -88,7 +92,7 @@ export const DiaryProvider = ({ children }) => {
         return {};
     };
     
-    const onUpdate = async (updatedData) => {
+    const onUpdateDiary = async (updatedData) => {
         try {
             const response = await axios.post(`http://13.124.144.246:3000/api/diaries/${updatedData.diary_id}/update`,
                 { diaryId: updatedData.diary_id, content: updatedData.content },
@@ -104,9 +108,31 @@ export const DiaryProvider = ({ children }) => {
         }
     };
 
+    const onDeleteDiary = async (diary_id) => {
+        try {
+            const response = await axios.post(`http://13.124.144.246:3000/api/diaries/${diary_id}/delete`,
+                {},
+                {
+                    headers: {
+                        "firebase-uid": auth.currentUser.uid,
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
+            
+            console.log(response.data);
+            dispatch({
+                type: "DELETE",
+                diary_id
+            });
+        } catch (error){
+            console.log(error);
+        }
+    }
+
     return (
         <DiaryStateContext.Provider value={state}>
-            <DiaryDispatchContext.Provider value={{ onCreate, onUpdate }}>
+            <DiaryDispatchContext.Provider value={{ onCreateDiary, onUpdateDiary, onDeleteDiary }}>
                 {children}
             </DiaryDispatchContext.Provider>
         </DiaryStateContext.Provider>

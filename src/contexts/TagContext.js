@@ -23,6 +23,10 @@ const reducer = (state, action) => {
             const newState = [action.data, ...state];
             return newState;
         }
+        case "DELETE": {
+            const newState = state.filter((it) => it.id !== action.diary_id);
+            return newState;
+        }
         default:
             return state;
     }
@@ -66,7 +70,7 @@ export const TagProvider = ({ children }) => {
         }
     };    
 
-    const onCreate = async (tags, diary_id) => {
+    const onCreateTag = async (tags, diary_id) => {
         try {
             // tags는 ["#행복", "#사랑"] 과 같이 사용자가 선택한 해시태그 배열
             const response = await axios.post(`http://13.124.144.246:3000/api/tag`,
@@ -94,9 +98,17 @@ export const TagProvider = ({ children }) => {
         }
     };
 
+    // api/diaries/${diary_id}/delete에서 태그 포함 모든 부분을 삭제하므로 이곳에서는 dispatch만 수행
+    const onDeleteTag = (diary_id) => {
+        dispatch({
+            type: "DELETE",
+            diary_id
+        });
+    }
+
     return (
         <TagStateContext.Provider value={state}>
-            <TagDispatchContext.Provider value={{ fetchTagsForDiaries, onCreate }}>
+            <TagDispatchContext.Provider value={{ fetchTagsForDiaries, onCreateTag, onDeleteTag }}>
                 {children}
             </TagDispatchContext.Provider>
         </TagStateContext.Provider>

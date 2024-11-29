@@ -72,18 +72,15 @@
 }
 
 .upload-label {
-    display: flex; /* 아이콘과 텍스트를 가로로 정렬 */
-    align-items: flex-start; /* 위쪽 정렬 */
-    align-items: center; /* 세로 정렬 */
-    justify-content: center; /* 가로 가운데 정렬 */
-    height: 50px; /* 원하는 높이 지정 (예: 60px) */
-    width: 250px; /* 원하는 너비로 설정 (예: 150px) */
-    border-radius: 10px; /* 모서리 둥글게 설정 (선택 사항) */
-    cursor: pointer; /* 포인터 커서로 변경 */
-    font-size: 18px; /* 글자 크기 */
-    padding: 5px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
     background-color: #ffffff;
-    width: 100%; /* 부모 컨테이너의 너비에 맞게 설정 */
 }
 
 .image-file {
@@ -94,7 +91,7 @@
 
 .file-preview {
     width: 100%;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 .new-button-container {

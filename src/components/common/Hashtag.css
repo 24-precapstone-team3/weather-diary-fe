@@ -1,9 +1,8 @@
 .Hashtag {
-    display: inline-block;
     padding: 5px 10px;
-    font-size: 16px;
+    font-size: 14px;
+    letter-spacing: 1px;
     border-radius: 15px; /* 둥근 모서리 */
-    margin: 5px; /* 해시태그 간격 */
     color: #000; /* 기본 글자색 */
     background-color: #e0e0e0; /* 기본 배경색 */
     cursor: pointer; /* 포인터 커서 */

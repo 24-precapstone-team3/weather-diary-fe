@@ -41,43 +41,46 @@
 }
 
 .analysis-message {
-    padding-inline-start: -15px; /* 상하좌우 px 여백 */
+    padding-top: 10px;
+    padding-bottom: 10px;
     padding-inline-end: 15px;
     font-size: 16px;
     line-height: 1.5;
     letter-spacing: 0.5px;
 }
 
+.analysis-message p {
+    margin: 0;
+}
+
 .hashtag-container {
     display: flex;
-    flex-wrap: wrap; /* 줄 바꿈 허용 */
-    margin-block-start: 10px; /* 메시지와 해시태그 사이 간격 */
-    margin-block-end: 15px;
-    gap: 4px;
+    flex-wrap: wrap;
+    padding-right: 15px;
+    padding-bottom: 20px;
+    gap: 10px;
 }
 
 .hashtag-message {
     background-color: rgba(0, 123, 255, 0.9);
     border-radius: 10px;
-    margin-inline-end: 10px;
-    padding-inline-start: 10px;
-    padding-inline-end: 20px;
-    padding-block-start: -5px;
-    padding-block-end: -5px;
-    font-size: 16px;
     line-height: 1.5;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
+    padding: 10px;
+    margin: 10px 0;
     color: white;
+}
+
+.hashtag-message p {
+    margin: 0;
 }
 
 /* 버튼 컨테이너 스타일 */
 .analysis-button-container {
-    padding: 20px;
+    padding: 30px;
     display: flex;
     justify-content: space-between;
     gap: 20px;
-    position: sticky; /* 절대 위치 설정 */
-    inset-block-end: 0; /* 하단에 고정 */ 
 }
 
 /* 모달 오버레이 스타일 */

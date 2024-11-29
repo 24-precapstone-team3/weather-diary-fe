@@ -157,27 +157,25 @@ const Counsel = () => {
     };
 
     // 모달 닫기 핸들러
-    const handleClosePopup = () => {
-        Swal.fire({
-            title: "저장 안됨",
+    const handleClosePopup = async () => {
+        const result = await Swal.fire({
+            title: "심리 상담 저장 안됨",
             text: "저장하기 않고 닫으시겠습니까?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "닫기",
-            cancelButtonText: "이전",
+            cancelButtonText: "취소",
             customClass: {
                 confirmButton: 'no-focus-outline',
                 closeButton: 'no-focus-outline',
             },
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // "닫기" 버튼 클릭 시 calendar.js로 이동
-                navigate("/");
-            } else if (result.isDismissed) {
-                // "이전" 버튼 클릭 시 현재 모달을 닫고 글쓰기 화면으로 돌아감
-                setIsOpen(true); // 모달을 다시 열어줌
-            }
-        });
+        })
+        
+        if (result.isConfirmed) {
+            navigate("/");
+        } else {
+            setIsOpen(true);
+        }
     }
 
     if (!newDiary || isCounseling) {

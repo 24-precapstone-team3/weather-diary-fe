@@ -8,10 +8,11 @@ import Button from '../components/common/Button';
 import PageTransition from '../components/common/PageTransition';
 import CalendarHeader from '../components/calendar/CalendarHeader';
 import CalendarBackground from '../components/calendar/CalendarBackground';
-import { DiaryStateContext } from '../contexts/DiaryContext';
 import Loading from '../components/common/Loading';
 import { getCounselByDiaryId, getDateForDisplay, getPhotoByDiaryId } from '../utils';
 import Swal from 'sweetalert2';
+import { DiaryDispatchContext } from '../contexts/DiaryContext';
+import { TagDispatchContext } from '../contexts/TagContext';
 
 // Modal 컴포넌트는 생략
 const Modal = ({ isOpen, onClose, children, modalWidth }) => {
@@ -109,10 +110,10 @@ const Modal = ({ isOpen, onClose, children, modalWidth }) => {
 };
 
 const Diary = () => {
-    const [entry, setEntry] = useState('');
-    const { date, weather, emotion, analysisContent, imgSample, feedbackMessage } = useContext(DiaryStateContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const { onDeleteDiary } = useContext(DiaryDispatchContext);
+    const { onDeleteTag } = useContext(TagDispatchContext);
     const [modalWidth, setModalWidth] = useState('400px'); //모달 확장
     const [photoURL, setPhotoURL] = useState(""); // 사진 URL
     const [feedbackVisible, setFeedbackVisible] = useState(false);
@@ -121,6 +122,7 @@ const Diary = () => {
     const location = useLocation();
     const diary = location.state?.diary || null;
     const diaryTags = location.state?.diaryTags || null;
+    const tagColors = ["#fcc3cc", "#dbbefc", "#52acff"];
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
@@ -138,27 +140,36 @@ const Diary = () => {
         navigate('/new'); // 수정 버튼 클릭 시 new.js로 이동 추가
     };
 
-    const handleDelete = () => {
-        if (entry.trim() === '') {
+    const handleDelete = async () => {
+        const result = await Swal.fire({
+            title: "일기 삭제",
+            text: "일기를 정말 삭제하시겠습니까?",
+            icon: "warning",
+            confirmButtonText: "삭제",
+            cancelButtonText: "취소",
+            showCancelButton: true,
+            customClass: {
+                confirmButton: 'no-focus-outline',
+                cancelButton: 'no-focus-outline'
+            },
+        })
+        
+        if (result.isConfirmed) {
+            onDeleteDiary(diary.diary_id);
+            onDeleteTag(diary.diary_id);
+
             Swal.fire({
-                title: "일기 삭제",
-                text: "일기를 정말 삭제하시겠습니까?",
-                icon: "warning",
-                confirmButtonText: "삭제",
-                cancelButtonText: "닫기",
-                showCancelButton: true,
+                title: "일기 삭제 성공",
+                text: "일기가 삭제되었습니다",
+                icon: "success",
+                confirmButtonText: "확인",
                 customClass: {
-                    confirmButton: 'no-focus-outline',
-                    cancelButton: 'no-focus-outline'
+                    confirmButton: 'no-focus-outline'
                 },
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // 삭제 로직을 여기에 추가합니다.
-                } else if (result.isDismissed) {
-                    setIsModalOpen(true);
-                }
+                willClose: () => navigate("/", { replace: true })
             });
-            return;
+        } else {
+            setIsModalOpen(true);
         }
     };
 
@@ -240,9 +251,15 @@ const Diary = () => {
                                 {diary.content}
                             </div>
                             <div className="hashtags">
-                                <span className="hashtag1" style={{ backgroundColor: "#fcc3cc" }}>{diaryTags[0]}</span>
-                                <span className="hashtag2" style={{ backgroundColor: "#dbbefc" }}>{diaryTags[1]}</span>
-                                <span className="hashtag3" style={{ backgroundColor: "#52acff" }}>{diaryTags[2]}</span>
+                                {diaryTags.map((tag, index) => (
+                                    <span
+                                        key={index}
+                                        className={`hashtag${index + 1}`}
+                                        style={{ backgroundColor: tagColors[index] }}
+                                    >
+                                        {tag}
+                                    </span>
+                                ))}
                             </div>
                         </div>
                         {feedbackVisible && (
@@ -258,8 +275,7 @@ const Diary = () => {
                     </div>
                     <div className="diary-button-container">
                         <Button text={"심리상담"} onClick={handleExpandModal}/>
-                        <Button text={"삭 제"} className="red-button" onClick={handleDelete} />
-                        <Button text={"수 정"} onClick={handleEdit} />
+                        <Button text={"삭 제"} type={"negative"} onClick={handleDelete} />
                         <Button text={"닫 기"} type={"light"} onClick={handleCloseModal} />
                     </div>
                 </PageTransition>
