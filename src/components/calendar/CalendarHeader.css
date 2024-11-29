@@ -28,14 +28,17 @@
     border: 1px solid #ececec;
     border-radius: 24px;
     padding: 8px 16px;
-    font-size: 16px;
+    font-size: 28px;
 }
 
 .CalendarHeader .left_section .search_wrapper input {
+    font-family: 'S-CoreDream-3Light';
+    font-size: 16px;
     border: none;
     background-color: #f6f6f6;
     vertical-align: middle;
-    border-radius: 20px;
+    padding: 0;
+    letter-spacing: 1px;
 }
 
 .CalendarHeader .left_section .search_wrapper input:focus {
@@ -55,13 +58,19 @@
     flex-direction: column;
     font-family: "Outfit", sans-serif;
     font-size: 16px;
-    border: 1px solid #ececec;
+    background-color: #f6f6f6;
     border-radius: 5px;
     width: 40%;
     height: 100%;
     box-sizing: border-box;
     padding: 10px;
     color: #565656;
+}
+
+.CalendarHeader .right_section .weather_wrapper .location {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .CalendarHeader .right_section .weather_wrapper .temperature {
@@ -75,6 +84,10 @@
 
     .CalendarHeader .left_section .search_wrapper {
         padding: 0.6vw 1.2vw;
+        font-size: 2.2vw;
+    }
+
+    .CalendarHeader .left_section .search_wrapper input {
         font-size: 1.2vw;
     }
 

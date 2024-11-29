@@ -20,8 +20,18 @@
     color: #22abf3;
 }
 
+.Button_negative {
+    background-color: #ffbdbd;
+    color: #f27474;
+}
+
 .Button:hover {
     background-color: #22abf3;
+    color:white;
+}
+
+.Button_negative:hover {
+    background-color: #f27474;
     color:white;
 }
 

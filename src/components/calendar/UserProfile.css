@@ -3,9 +3,9 @@
     align-items: center;
     justify-content: end;
     gap: 10px;
-    border: 1px solid #ececec;
     border-radius: 5px;
     box-sizing: border-box;
+    background-color: #f6f6f6;
     height: 100%;
     padding: 10px;
 }
@@ -23,7 +23,7 @@
 
 .UserProfile .content_section .menu_wrapper .dropdown_menu {
     position: absolute;
-    transform: translate(-80%, 32%);
+    transform: translate(-80%, 70%);
     background-color: white;
     border: 1px solid #e1e1e1;
     border-radius: 5px;

@@ -62,7 +62,7 @@ const New = () => {
     const [file, setFile] = useState(null);
     const [filePreview, setFilePreview] = useState(null); // 이미지 미리보기를 위한 상태 추가
     const [isOpen, setIsOpen] = useState(false); // 팝업 열림 상태
-    const { onCreate } = useContext(DiaryDispatchContext);
+    const { onCreateDiary } = useContext(DiaryDispatchContext);
     const navigate = useNavigate();
     const location = useLocation();
     const date = location.state?.date || null;
@@ -113,7 +113,7 @@ const New = () => {
         
         // 반환값(새로운 일기 객체) 활용을 위해 await 사용
         try {
-            const newDiary = await onCreate(entry, getFormattedDate(date), "seoul");
+            const newDiary = await onCreateDiary(entry, getFormattedDate(date), "seoul");
 
             if (file) {
                 uploadPhoto(file, newDiary.diary_id);
@@ -135,7 +135,7 @@ const New = () => {
     // 일기분석 버튼 클릭
     const handleAnalyze = async () => {
         // 일기 본문을 작성하지 않은 경우
-        if (entry.trim() === '') {
+        if (entry.trim() === "") {
             Swal.fire({
                 title: "일기 작성",
                 text: "일기를 작성하지 않으셨습니다",
@@ -151,7 +151,7 @@ const New = () => {
         try {
             const newDiary = await handleSave();
             console.log(newDiary);
-            navigate('/analysis', { state: { newDiary } }); // 일기 분석 페이지로 이동
+            navigate("/analysis", { state: { newDiary } }); // 일기 분석 페이지로 이동
         } catch (error) {
             console.log(error);
             Swal.fire({
@@ -166,29 +166,27 @@ const New = () => {
         }
     };
 
-    const handleClosePopup = () => {
+    const handleClosePopup = async () => {
         if (entry.trim() !== '' || file) {
             // 작성창에 텍스트가 있거나 선택된 사진이 있을 때
-            Swal.fire({
-                title: "저장 안됨",
-                text: "저장하기 않고 닫으시겠습니까?",
+            const result = await Swal.fire({
+                title: "일기 저장 안됨",
+                text: "저장하지 않고 닫으시겠습니까?",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonText: "닫기",
-                cancelButtonText: "이전",
+                cancelButtonText: "취소",
                 customClass: {
                     confirmButton: 'no-focus-outline',
                     closeButton: 'no-focus-outline'
                 },
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // "닫기" 버튼 클릭 시 calendar.js로 이동
-                    navigate('/');
-                } else if (result.isDismissed) {
-                    // "이전" 버튼 클릭 시 현재 모달을 닫고 글쓰기 화면으로 돌아감
-                    setIsOpen(true); // 모달을 다시 열어줌
-                }
             });
+
+            if (result.isConfirmed) {
+                navigate("/");
+            } else {
+                setIsOpen(true);
+            }
         } else {
             // 작성창에 텍스트가 없을 때
             navigate("/"); // 바로 calendar.js로 이동

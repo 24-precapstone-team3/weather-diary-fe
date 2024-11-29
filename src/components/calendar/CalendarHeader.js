@@ -45,16 +45,18 @@ const CalendarHeader = ({ onSearch }) => {
                         ref={searchRef}
                         type="text"
                         value={searchKeyword}
+                        placeholder={"#해시태그 검색"}
                         onChange={(e) => setSearchKeyword(e.target.value)}
                     />
                 </div>
             </div>
             <div className="right_section">
                 <div className="weather_wrapper">
-                    {isLoading ? "날씨 로드 중" : (
+                    {isLoading ? <div className="loading">날씨 로드 중</div> : (
                         <>
                             <div className="location">
                                 {weatherInfo.location}
+                                <FontAwesomeIcon icon={icons.faLocationArrow} />
                             </div>
                             <div className="temperature">
                                 {`${Math.round(weatherInfo.weather.temperature)}°`}

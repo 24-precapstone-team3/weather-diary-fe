@@ -41,12 +41,27 @@
 .modal-content-wrapper {
     display: flex;
     width: 100%;
+    justify-content: center;
 }
 
 .header {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.header .date_wrapper {
+    font-family: "Outfit", sans-serif;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.header .date_wrapper span {
+    font-family: 'S-CoreDream-3Light';
+    font-size: 18px;
 }
 
 .date {
@@ -60,23 +75,21 @@
 }
 
 .weather, .emotion {
-    font-size: 18px; /* 헤더 글씨 크기 조절 */
+    font-size: 16px; /* 헤더 글씨 크기 조절 */
 }
 
 .diary-all {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    background-color: #F6F6F6; /* 배경색 설정 */
-    padding: 30px; /* 내부 여백 */
-    border-radius: 8px; /* 모서리 둥글게 */
-    box-shadow:
-        -2px 0 2px rgba(0, 0, 0, 0.1), /* 왼쪽 그림자 */ 
-        2px 4px 10px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
+    background-color: #F6F6F6;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: -2px 0 2px rgba(0, 0, 0, 0.1), 2px 4px 10px rgba(0, 0, 0, 0.2);
     width: 275px;
     min-height: 510px;
     height: auto;
-    margin: 20px;
+    margin-top: 20px;
 }
 
 .image-book {
@@ -91,6 +104,7 @@
     position: relative;
     width: 100%;
     height: auto;
+    border-radius: 10px;
 }
 
 .analysis-content {
@@ -103,17 +117,16 @@
 .hashtags {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin: 10px 0;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .hashtag1, .hashtag2, .hashtag3 {
     display: inline-block;
     padding: 5px 10px;
-    font-size: 16px;
     border-radius: 15px;
-    color: white; /* 선택된 해시태그의 글자색 */;
-    margin: 8px;
+    color: white;
+    letter-spacing: 1px;
     font-size: 14px;
 }
 
@@ -176,10 +189,10 @@
 
 .diary-button-container {
     margin-top: 20px;
-    padding: 10px 0 0 0;
+    padding: 20px;
     display: flex;
     justify-content: space-between;
-    gap: 5px;
+    gap: 20px;
 }
 
 .modal-overlay {

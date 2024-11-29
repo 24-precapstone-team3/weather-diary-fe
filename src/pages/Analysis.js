@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 import Hashtag from '../components/common/Hashtag';
 import { TagDispatchContext } from '../contexts/TagContext';
 import Loading from '../components/common/Loading';
-import { analyzeDiary } from '../utils';
+import { analyzeDiary, processHashtags } from '../utils';
 
 // 모달 컴포넌트 정의
 const Modal = ({ isOpen, onClose, children }) => {
@@ -71,7 +71,7 @@ const Analysis = () => {
     const [generatedHashtags, setGeneratedHashtags] = useState([]); // 분석을 통해 생성된 해시태그
     const [displayedHashtags, setDisplayedHashtags] = useState([]); // 표시할 해시태그
     const [activeHashtags, setActiveHashtags] = useState([]); // 활성화된 해시태그 상태
-    const { onCreate } = useContext(TagDispatchContext);
+    const { onCreateTag } = useContext(TagDispatchContext);
     const navigate = useNavigate();
     const location = useLocation();
     const newDiary = location.state?.newDiary || null;
@@ -96,7 +96,7 @@ const Analysis = () => {
 
             try {
                 const { mood, hashTag } = await analyzeDiary(entry);
-                const hashtagsArray = hashTag.split(" ").map(tag => `${tag.trim()}`);
+                const hashtagsArray = processHashtags(hashTag);
                 setGeneratedHashtags(hashtagsArray);
                 console.log("분석 결과:", { mood, hashTag });
             } catch (error) {
@@ -196,9 +196,8 @@ const Analysis = () => {
         });
     };
 
-    // 해시태그 저장
-    const handleSave = () => {
-        if (activeHashtags.length <= 0) {
+    const isActivedHashtagsExist = () => {
+        if (activeHashtags <= 0) {
             Swal.fire({
                 title: "해시태그 선택",
                 text: "최소 1개를 선택해주세요",
@@ -208,57 +207,82 @@ const Analysis = () => {
                     confirmButton: 'no-focus-outline'
                 },
             });
-            return;
+            return false;
+        } else {
+            return true;
         }
-        console.log(activeHashtags);
-        onCreate(activeHashtags, newDiary.diary_id);
+    }
 
-        Swal.fire({
-            title: "일기 분석 저장",
-            text: "저장되었습니다!",
-            icon: "success",
-            confirmButtonText: "확인",
-            customClass: {
-                confirmButton: 'no-focus-outline'
-            },
-        });
+    // 해시태그 저장
+    const handleSave = () => {
+        console.log(activeHashtags);
+        onCreateTag(activeHashtags, newDiary.diary_id);
     }
 
     // 저장 후 심리 상담 페이지로 이동
     const handleCounselClick = () => {
+        if (!isActivedHashtagsExist()) {
+            return;
+        }
         handleSave();
         navigate("/counsel", { state: { newDiary } });
     };
 
     // 심리 상담을 하지 않고 태시태그만 저장
-    const handleSaveOnly = () => {
-        handleSave();
-        navigate("/");
-    }
-
-    // 모달 닫기 핸들러
-    const handleClosePopup = () => {
-        setIsOpen(false);
-        Swal.fire({
-            title: "저장 안됨",
-            text: "저장하기 않고 닫으시겠습니까?",
-            icon: "warning",
+    const handleSaveOnly = async () => {
+        if (!isActivedHashtagsExist()) {
+            return;
+        }
+        
+        const result = await Swal.fire({
+            title: "심리 상담 미완료",
+            text: "심리 상담을 하지 않고 저장할까요?",
+            icon: "question",
             showCancelButton: true,
-            confirmButtonText: "닫기",
-            cancelButtonText: "이전",
+            confirmButtonText: "저장",
+            cancelButtonText: "취소",
             customClass: {
                 confirmButton: 'no-focus-outline',
                 closeButton: 'no-focus-outline'
             },
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // "닫기" 버튼 클릭 시 calendar.js로 이동
-                navigate("/");
-            } else if (result.isDismissed) {
-                // "이전" 버튼 클릭 시 현재 모달을 닫고 글쓰기 화면으로 돌아감
-                setIsOpen(true); // 모달을 다시 열어줌
-            }
-        });
+        })
+
+        if (result.isConfirmed) {
+            handleSave();
+            Swal.fire({
+                title: "일기 분석 저장",
+                text: "저장되었습니다!",
+                icon: "success",
+                confirmButtonText: "확인",
+                customClass: {
+                    confirmButton: 'no-focus-outline'
+                },
+                willClose: () => navigate("/", { replace: true })
+            });
+        }
+    }
+
+    // 모달 닫기 핸들러
+    const handleClosePopup = async () => {
+        setIsOpen(false);
+        const result = await Swal.fire({
+            title: "해시태그 저장 안됨",
+            text: "저장하기 않고 닫으시겠습니까?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "닫기",
+            cancelButtonText: "취소",
+            customClass: {
+                confirmButton: 'no-focus-outline',
+                closeButton: 'no-focus-outline'
+            },
+        })
+        
+        if (result.isConfirmed) {
+            navigate("/");
+        } else {
+            setIsOpen(true);
+        }
 
     };
 

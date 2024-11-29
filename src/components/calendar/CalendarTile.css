@@ -20,7 +20,8 @@
 }
 
 .CalendarTile_highlight {
-    border: 2px solid red;
+    border: 1px solid #bbb1d6;
+    background-color: lavender;
 }
 
 .CalendarTile:hover {

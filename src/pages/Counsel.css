@@ -43,9 +43,21 @@
 }
 
 .feedback-message {
-    padding-left: -10px; /* 상하좌우 px 여백 */
     padding-right: 15px;
-    font-size: 18px; /* 글자 크기 */
+    font-size: 16px; /* 글자 크기 */
+}
+
+.feedback-message .text {
+    font-weight: bold;
+    margin: 10px 0;
+    background-color: rgba(0, 123, 255, 0.9);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.feedback-message .feedback {
+    line-height: 1.5;
 }
 
 .counsel-button-container {
