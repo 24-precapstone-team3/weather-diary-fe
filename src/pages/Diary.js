@@ -131,9 +131,28 @@ const Diary = () => {
         navigate('/');
     };
 
-    const handleExpandModal = () => {
-        setModalWidth('800px'); //모달 확장
-        setFeedbackVisible(true);
+    const handleExpandModal = async () => {
+        if (feedbackMsg) {
+            setModalWidth('800px'); //모달 확장
+            setFeedbackVisible(true);
+        } else {
+            const result = await Swal.fire({
+                title: "심리 상담",
+                text: "상담 데이터가 없습니다. 심리 상담을 받을까요?",
+                icon: "info",
+                confirmButtonText: "확인",
+                cancelButtonText: "취소",
+                showCancelButton: true,
+                customClass: {
+                    confirmButton: 'no-focus-outline',
+                    cancelButton: 'no-focus-outline'
+                },
+            })
+
+            if (result.isConfirmed) {
+                navigate("/counsel", { state: { newDiary: diary } });
+            }
+        }
     };
 
     const handleEdit = () => {
@@ -194,18 +213,17 @@ const Diary = () => {
             try {
                 // 심리 상담 피드백 가져오기
                 const feedbackData = await getCounselByDiaryId(diary.diary_id);
-                if (feedbackData) {
+                if (Array.isArray(feedbackData) && feedbackData.length > 0 && feedbackData[0]?.feedback) {
                     setFeedbackMsg(feedbackData[0].feedback);
                 }
-
+    
                 // 사진 URL 가져오기
                 const photoData = await getPhotoByDiaryId(diary.diary_id);
-                console.log('photodata:', photoData);
-                if (photoData) {
+                if (Array.isArray(photoData) && photoData.length > 0 && photoData[0]?.file_path) {
                     setPhotoURL(photoData[0].file_path);
                 }
             } catch (error) {
-                console.log(error);
+                console.error("Error fetching diary data:", error);
                 Swal.fire({
                     title: "일기 조회",
                     text: "일기 조회 중 오류가 발생했습니다",
