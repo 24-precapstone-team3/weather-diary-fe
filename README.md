@@ -15,7 +15,7 @@
 ## 📎 기타 정보 / その他の情報
 
 **🌐 포트폴리오 사이트 / ポートフォリオサイト**  
-[`https://seremeety-kr.web.app`](https://seremeety-kr.web.app)  
+[`https://mesel7.dev/projects/weather-diary`](https://mesel7.dev/projects/weather-diary)  
 
 **✉️ 문의 / お問い合わせ**  
 cejhans1520@gmail.com
